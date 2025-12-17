@@ -40,8 +40,7 @@
 > 이를 통해 **중복 상태를 제거**하고, 비즈니스 로직과 UI의 **경계를 명확히** 하며, **일관된 사용자 경험**을 제공할 수 있는 기반을 마련했습니다.
 
 <p align="center">
-  <video src="./docs/gif/petfit-intro.mp4" width="100%" autoplay loop muted playsinline>
-  </video>
+  <img src="./docs/gif/petfit-intro.gif" width="100%" alt="PetFit intro demo" />
 </p>
 
 ## 📌 주요 기능
@@ -91,8 +90,7 @@
 ### 1. 로그인, 반려동물 정보 입력 페이지
 
 <p align="center">
-  <video src="./docs/gif/feature-login.mp4" width="100%" autoplay loop muted playsinline>
-  </video>
+  <img src="./docs/gif/feature-login.gif" width="100%" alt="Login & onboarding demo" />
 </p>
 
 **설명**
@@ -116,10 +114,10 @@
 
 ### 2. 홈 BriefCard 모달, 달력 페이지
 
-<div style="display: flex; gap: 4px; justify-content: center;">
-  <video src="./docs/gif/feature-brief.mp4" width="50%" autoplay loop muted playsinline></video>
-  <video src="./docs/gif/feature-remark.mp4" width="50%" autoplay loop muted playsinline></video>
-</div>
+<p align="center">
+  <img src="./docs/gif/feature-brief.gif" width="49%" alt="Home brief modal demo" />
+  <img src="./docs/gif/feature-remark.gif" width="49%" alt="Calendar remark demo" />
+</p>
 
 **설명**
 
