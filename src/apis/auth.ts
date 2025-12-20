@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { IS_DEV } from '@/constants/env';
+import { ENV } from '@/constants/env';
 
 import { axiosInstance } from './axiosInstance';
 
@@ -10,7 +10,7 @@ import { axiosInstance } from './axiosInstance';
  * - prod: 쿠키(HttpOnly) 기반 자동 저장, 별도 응답 처리 없음
  */
 export const kakaoLogin = async (code: string) => {
-  const endpoint = IS_DEV ? '/auth/kakao/login/dev' : '/auth/kakao/login';
+  const endpoint = ENV.IS_DEV ? '/auth/kakao/login/dev' : '/auth/kakao/login';
   try {
     await axiosInstance.get(endpoint, { params: { code } });
   } catch (error) {
@@ -25,10 +25,10 @@ export const kakaoLogin = async (code: string) => {
  * - prod: 쿠키 기반 로그아웃
  */
 export const kakaoLogout = async () => {
-  const endpoint = IS_DEV ? '/auth/kakao/logout/dev' : '/auth/kakao/logout';
+  const endpoint = ENV.IS_DEV ? '/auth/kakao/logout/dev' : '/auth/kakao/logout';
 
   try {
-    const body = IS_DEV ? { refreshToken: localStorage.getItem('refreshToken') } : undefined; // prod는 쿠키 기반이라 body 비움
+    const body = ENV.IS_DEV ? { refreshToken: localStorage.getItem('refreshToken') } : undefined; // prod는 쿠키 기반이라 body 비움
 
     await axiosInstance.post(endpoint, body);
   } catch (error) {

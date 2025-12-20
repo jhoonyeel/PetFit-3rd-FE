@@ -11,6 +11,7 @@ import type { RootState } from './store/store';
 import { theme } from './styles/theme';
 import { AlarmSseBridge } from './features/alarm/AlarmSseBridge';
 import { ToastProvider } from './ds/ToastProvider';
+import { AuthBootstrap } from './routes/AuthBootstrap';
 
 const AppInitializer = () => {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <ToastProvider>
         <GlobalStyle />
+        <AuthBootstrap />
         <AppInitializer />
         <AlarmSseBridge />
         <RouterProvider router={router} />

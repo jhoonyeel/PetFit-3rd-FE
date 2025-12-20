@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { kakaoLogout } from '@/apis/auth';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { BaseModal } from '@/components/common/BaseModal';
-import { IS_DEV } from '@/constants/env';
+import { ENV } from '@/constants/env';
 import { logout } from '@/store/authSlice';
 
 interface Props {
@@ -30,7 +30,7 @@ export const LogoutModal = ({ isOpen, onClose }: Props) => {
       await kakaoLogout();
 
       // 2) 개발환경이면 로컬 토큰 정리
-      if (IS_DEV) {
+      if (ENV.IS_DEV) {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         delete axiosInstance.defaults.headers.common.Authorization;

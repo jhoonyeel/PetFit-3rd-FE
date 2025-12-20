@@ -21,6 +21,12 @@ export const getPets = async (): Promise<Pet[]> => {
   }
 };
 
+// 상세 조회 API
+export const getPetById = async (petId: number): Promise<PetApiResponse> => {
+  const res = await axiosInstance.get<ApiResponse<PetApiResponse>>(`/pets/${petId}`);
+  return res.data.content;
+};
+
 export interface PetApiResponse {
   id: number;
   name: string;
@@ -83,15 +89,6 @@ export const putFavorite = async (petId: number) => {
     console.log('반려동물 즐겨찾기 수정 failed', error);
     throw error;
   }
-};
-
-// 상세 조회 API
-export const getPetById = async (petId: number): Promise<PetApiResponse> => {
-  const res = await axiosInstance.get<ApiResponse<PetApiResponse>>(`/pets/${petId}`);
-  if (!res.data.success || !res.data.content) {
-    throw new Error(res.data.message || '반려동물 상세 조회 실패');
-  }
-  return res.data.content;
 };
 
 export const deletePet = async (petId: number) => {

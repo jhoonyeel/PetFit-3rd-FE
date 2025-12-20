@@ -14,18 +14,20 @@ import type { RootState } from '@/store/store';
 export const PublicRouter = () => {
   const status = useSelector((s: RootState) => s.auth.status);
 
-  if (status === 'checking') {
-    return <LoadingSpinner />;
-  }
+  switch (status) {
+    case 'idle':
+    case 'checking':
+      return <LoadingSpinner />;
 
-  if (status === 'authenticated') {
-    return <Navigate to="/" replace />;
-  }
+    case 'authenticated':
+      return <Navigate to="/" replace />;
 
-  if (status === 'onboarding') {
-    return <Navigate to="/signup/pet" replace />;
-  }
+    case 'onboarding':
+      return <Navigate to="/signup/pet" replace />;
 
-  // unauthenticated → 접근 허용
-  return <Outlet />;
+    // unauthenticated → 접근 허용
+    case 'unauthenticated':
+    default:
+      return <Outlet />;
+  }
 };

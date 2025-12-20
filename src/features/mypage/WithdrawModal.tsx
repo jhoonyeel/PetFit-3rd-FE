@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { kakaoWithdraw } from '@/apis/auth';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { BaseModal } from '@/components/common/BaseModal';
-import { IS_DEV } from '@/constants/env';
+import { ENV } from '@/constants/env';
 import { logout } from '@/store/authSlice';
 import type { RootState } from '@/store/store';
 
@@ -39,7 +39,7 @@ export const WithdrawModal = ({ isOpen, onClose }: Props) => {
       await kakaoWithdraw(memberId);
 
       // 2) 클라이언트 상태/캐시 정리
-      if (IS_DEV) {
+      if (ENV.IS_DEV) {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         delete axiosInstance.defaults.headers.common.Authorization;

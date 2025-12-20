@@ -12,6 +12,7 @@ import { usePetForm } from '@/hooks/usePetForm';
 import { Button } from '@/ds/Button';
 import { TitleHeader } from '@/components/common/TitleHeader';
 import type { PetForm } from '@/types/pet';
+import { ENV } from '@/constants/env';
 
 export const SignupPetRegisterPage = () => {
   const [form, setForm] = useState<PetForm>({
@@ -35,7 +36,7 @@ export const SignupPetRegisterPage = () => {
     if (petInfo) {
       dispatch(setSelectedPet(petInfo)); // ✅ 전역 상태로 저장
       dispatch(setSelectedPetId(petInfo.id)); // localStorage에 id만 따로 저장
-      navigate('/slot?flow=signup');
+      ENV.IS_DEMO ? navigate('/') : navigate('/slot?flow=signup');
     } else if (error) {
       alert(error);
     }
