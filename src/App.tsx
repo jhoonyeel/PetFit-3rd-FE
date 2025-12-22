@@ -38,6 +38,9 @@ const App = () => {
         <AuthBootstrap />
         <AppInitializer />
         <AlarmSseBridge />
+        <div style={{ position: 'fixed', top: 0, left: 0, background: 'yellow', zIndex: 99999 }}>
+          APP_RENDER_OK
+        </div>
         <RouterProvider router={router} />
       </ToastProvider>
     </ThemeProvider>
