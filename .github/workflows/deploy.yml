@@ -22,7 +22,7 @@ jobs:
         run: npm ci
 
       - name: Build (production)
-        run: npm run build -- --mode production
+        run: npm run build -- --mode demo
         # demo로 배포하려면 위 줄을 --mode demo로 변경
 
       - name: Prepare SSH key
