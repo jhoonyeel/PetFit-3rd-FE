@@ -13,13 +13,15 @@ export function AlarmSseBridge() {
   const dispatch = useDispatch();
   const toast = useToast();
   const petId = useSelector((s: RootState) => s.selectedPet.id);
+  const authStatus = useSelector((s: RootState) => s.auth.status);
 
   const esRef = useRef<EventSource | null>(null);
   const retryRef = useRef(0);
   const closedRef = useRef(false);
 
   useEffect(() => {
-    if (petId == null) {
+    // ✅ authenticated가 아니면 SSE 금지 (onboarding 포함)
+    if (authStatus !== 'authenticated' || petId == null) {
       cleanup();
       return;
     }
