@@ -1,0 +1,66 @@
+name: Deploy to EC2 (static)
+
+on:
+  push:
+    branches: ["main"] # 배포 브랜치
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install
+        run: npm ci
+
+      - name: Build (production)
+        run: npm run build -- --mode production
+        # demo로 배포하려면 위 줄을 --mode demo로 변경
+
+      - name: Prepare SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "${{ secrets.EC2_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Upload dist to EC2 (rsync)
+        run: |
+          TS=$(date +%Y%m%d_%H%M%S)
+          echo "RELEASE_TS=$TS" >> $GITHUB_ENV
+          ssh -i ~/.ssh/id_rsa -p ${{ secrets.EC2_PORT }} ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} \
+            "mkdir -p /var/www/petfit/releases/$TS"
+          rsync -az --delete -e "ssh -i ~/.ssh/id_rsa -p ${{ secrets.EC2_PORT }}" \
+            dist/ ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/var/www/petfit/releases/$TS/dist/
+
+      - name: Swap dist atomically + reload nginx
+        run: |
+          ssh -i ~/.ssh/id_rsa -p ${{ secrets.EC2_PORT }} ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          set -e
+
+          TS="${{ env.RELEASE_TS }}"
+          cd /var/www/petfit
+
+          # 백업(필요 시 롤백용)
+          if [ -d "dist" ]; then
+            mv dist "dist_bak_${TS}"
+          fi
+
+          # 새 dist 배치
+          mv "releases/${TS}/dist" dist
+          chown -R ubuntu:ubuntu dist
+
+          # nginx reload (sudo 권한 필요)
+          sudo nginx -t
+          sudo systemctl reload nginx
+
+          echo "✅ Deployed: ${TS}"
+          EOF
