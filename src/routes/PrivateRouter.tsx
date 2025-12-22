@@ -4,10 +4,16 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 
 import type { RootState } from '@/store/store';
+import { ENV } from '@/constants/env';
 
 export const PrivateRouter = () => {
   const location = useLocation();
   const status = useSelector((s: RootState) => s.auth.status);
+
+  // ✅ demo manual mode: idle은 판정 대기 상태 → private는 막고 로그인으로 유도
+  if (ENV.IS_DEMO && status === 'idle') {
+    return <Navigate to="/login" replace state={{ from: location }} />;
+  }
 
   switch (status) {
     case 'idle':

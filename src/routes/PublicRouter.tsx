@@ -3,6 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import type { RootState } from '@/store/store';
+import { ENV } from '@/constants/env';
 
 /**
  * 로그인 상태일 때는 접근 불가한 라우트 (예: /login)
@@ -13,6 +14,11 @@ import type { RootState } from '@/store/store';
  */
 export const PublicRouter = () => {
   const status = useSelector((s: RootState) => s.auth.status);
+
+  // ✅ demo manual mode: idle은 인증 판정 대기 상태 → public 접근 허용
+  if (ENV.IS_DEMO && status === 'idle') {
+    return <Outlet />;
+  }
 
   switch (status) {
     case 'idle':

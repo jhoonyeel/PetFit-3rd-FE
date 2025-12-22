@@ -1,5 +1,3 @@
-export const IS_DEV = import.meta.env.MODE === 'development';
-
 const MODE = import.meta.env.MODE;
 
 export const ENV = {
