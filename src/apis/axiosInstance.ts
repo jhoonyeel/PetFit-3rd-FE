@@ -3,7 +3,7 @@ import axios, { AxiosError, type AxiosRequestConfig, type InternalAxiosRequestCo
 import { clearAuth, setUnauthenticated } from '@/store/authSlice';
 
 export const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL,
+  baseURL: '/api',
   withCredentials: true,
 });
 
