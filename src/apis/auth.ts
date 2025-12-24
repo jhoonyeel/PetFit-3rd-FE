@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { ENV } from '@/constants/env';
 
-import { axiosInstance } from './axiosInstance';
+import { axiosInstance, refreshAccessToken } from './axiosInstance';
 
 /**
  * 카카오 로그인 요청
@@ -49,15 +49,6 @@ export const kakaoWithdraw = async (memberId: number | null) => {
   }
 };
 
-/**
- * 서버에 쿠키 기반 인증 상태 확인 요청
- */
-export const getAuthMe = async () => {
-  const res = await axiosInstance.post('/auth/me'); // 서버에서 쿠키 기반 검증
-  const { memberId, newUser } = res.data.content;
-  return { memberId, isNewUser: newUser };
-};
-
 export const getNickname = async () => {
   try {
     const response = await axiosInstance.get(`members`);
@@ -73,4 +64,23 @@ export const editNickname = async (nickname: string) => {
   } catch (error) {
     console.error('edit nickname failed: ', error);
   }
+};
+
+export type DemoScenario = 'new' | 'existing';
+
+export const demoLogin = async (scenario: DemoScenario) => {
+  await axiosInstance.post('/auth/demo-login', { scenario });
+};
+
+/**
+ * 서버에 쿠키 기반 인증 상태 확인 요청
+ */
+export const getAuthMe = async () => {
+  const res = await axiosInstance.get('/auth/me');
+  const { memberId, isNewUser } = res.data;
+  return { memberId, isNewUser };
+};
+
+export const refreshAuth = async () => {
+  await refreshAccessToken();
 };

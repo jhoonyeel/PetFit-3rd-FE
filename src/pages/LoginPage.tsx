@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { tx } from '@/styles/typography';
 import Logo from '@/assets/icons/logo.svg?react';
 import { useMemo, useRef, useState } from 'react';
+import { ENV } from '@/constants/env';
+import { demoLogin } from '@/apis/auth';
 
 export const LoginPage = () => {
   const slides = useMemo(
@@ -39,9 +41,18 @@ export const LoginPage = () => {
     startX.current = null;
   };
 
-  const handleKakaoLogin = () => {
+  const handleKakaoLogin = async () => {
+    if (ENV.IS_DEMO) {
+      return;
+    }
+
     const kakaoAuthURI = `https://kauth.kakao.com/oauth/authorize?client_id=${import.meta.env.VITE_APP_KAKAO_APP_KEY}&redirect_uri=${import.meta.env.VITE_APP_KAKAO_REDIRECT_URI}&response_type=code`;
     window.location.href = kakaoAuthURI;
+  };
+
+  const handleDemoLogin = async (scenario: 'new' | 'existing') => {
+    await demoLogin(scenario);
+    window.location.href = '/';
   };
 
   return (
@@ -77,6 +88,12 @@ export const LoginPage = () => {
           decoding="async"
         />
       </KakaoButton>
+      {ENV.IS_DEMO && (
+        <DemoButtons>
+          <button onClick={() => handleDemoLogin('new')}>DEMO: 신규 유저(온보딩)</button>
+          <button onClick={() => handleDemoLogin('existing')}>DEMO: 기존 유저(홈)</button>
+        </DemoButtons>
+      )}
     </Container>
   );
 };
@@ -145,4 +162,8 @@ const KakaoButton = styled.button`
     width: 250px;
     height: auto;
   }
+`;
+
+const DemoButtons = styled.div`
+  margin-top: 20px;
 `;

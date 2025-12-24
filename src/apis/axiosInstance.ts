@@ -1,4 +1,6 @@
+import { store } from '@/store/store';
 import axios, { AxiosError, type AxiosRequestConfig, type InternalAxiosRequestConfig } from 'axios';
+import { clearAuth, setUnauthenticated } from '@/store/authSlice';
 
 export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
@@ -41,6 +43,8 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest); // 갱신 후 1회 재시도
       } catch (e) {
         // 리프레시 실패 → 상위에서 하드 로그아웃/리다이렉트 처리
+        store.dispatch(clearAuth());
+        store.dispatch(setUnauthenticated('Refresh_Failed'));
         return Promise.reject(e);
       }
     }

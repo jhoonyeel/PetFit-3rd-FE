@@ -1,10 +1,17 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 export type AuthStatus = 'idle' | 'checking' | 'authenticated' | 'unauthenticated' | 'onboarding';
+export type AuthReason =
+  | 'Token_Expired'
+  | 'Refresh_Failed'
+  | 'Auth_Me_Failed'
+  | 'Account_Disabled'
+  | 'Logout';
+
 interface AuthState {
   status: AuthStatus; // 인증 흐름 상태
   recheckTick: number; // Return Node 트리거(이벤트 카운터)
-  reason?: 'Token_Expired' | 'Refresh_Failed' | 'Auth_Me_Failed' | 'Account_Disabled' | 'Logout';
+  reason?: AuthReason;
 }
 
 const initialState: AuthState = {
@@ -35,12 +42,12 @@ const authSlice = createSlice({
       state.reason = undefined;
     },
     /** /auth/me 실패(리프레시 실패 포함) */
-    setUnauthenticated: (state, action) => {
+    setUnauthenticated: (state, action: PayloadAction<AuthReason>) => {
       state.status = 'unauthenticated';
       state.reason = action.payload;
     },
     /** 명시적 로그아웃/탈퇴 */
-    logout: () => initialState,
+    clearAuth: () => initialState,
   },
 });
 
@@ -50,6 +57,6 @@ export const {
   setAuthenticated,
   setOnboarding,
   setUnauthenticated,
-  logout,
+  clearAuth,
 } = authSlice.actions;
 export default authSlice.reducer;
