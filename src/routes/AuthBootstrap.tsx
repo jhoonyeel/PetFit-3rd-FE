@@ -1,5 +1,4 @@
 import { getAuthMe } from '@/apis/auth';
-import { ENV } from '@/constants/env';
 import {
   requestRecheck,
   setAuthenticated,
@@ -19,13 +18,11 @@ export const AuthBootstrap = () => {
   const status = useSelector((s: RootState) => s.auth.status);
 
   useEffect(() => {
-    if (ENV.IS_DEMO) return;
     // 최초 진입
     if (status === 'idle') dispatch(requestRecheck());
   }, [status, dispatch]);
 
   useEffect(() => {
-    if (ENV.IS_DEMO) return;
     if (recheckTick === 0) return; // ✅ 최초 이벤트 전에는 실행 금지
 
     const run = async () => {
