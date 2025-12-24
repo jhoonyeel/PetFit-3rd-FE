@@ -5,6 +5,9 @@ import Logo from '@/assets/icons/logo.svg?react';
 import { useMemo, useRef, useState } from 'react';
 import { ENV } from '@/constants/env';
 import { demoLogin } from '@/apis/auth';
+import { requestRecheck } from '@/store/authSlice';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 export const LoginPage = () => {
   const slides = useMemo(
@@ -25,6 +28,8 @@ export const LoginPage = () => {
   const [index, setIndex] = useState(0);
   const trackRef = useRef<HTMLDivElement | null>(null);
   const startX = useRef<number | null>(null);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const go = (i: number) => setIndex(Math.max(0, Math.min(i, slides.length - 1)));
 
@@ -52,7 +57,8 @@ export const LoginPage = () => {
 
   const handleDemoLogin = async (scenario: 'new' | 'existing') => {
     await demoLogin(scenario);
-    window.location.href = '/';
+    dispatch(requestRecheck()); // ✅ AuthBootstrap 트리거
+    navigate('/', { replace: true });
   };
 
   return (
