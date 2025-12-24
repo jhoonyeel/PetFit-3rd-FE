@@ -9,7 +9,7 @@ import { kakaoLogout } from '@/apis/auth';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { BaseModal } from '@/components/common/BaseModal';
 import { ENV } from '@/constants/env';
-import { logout } from '@/store/authSlice';
+import { clearAuth } from '@/store/authSlice';
 
 interface Props {
   isOpen: boolean;
@@ -37,7 +37,7 @@ export const LogoutModal = ({ isOpen, onClose }: Props) => {
       }
 
       // 3) 전역 상태/캐시 초기화
-      dispatch(logout());
+      dispatch(clearAuth());
       await queryClient.cancelQueries(); // 진행중 요청 중단
       queryClient.removeQueries({ predicate: () => true }); // 민감 캐시 제거
 

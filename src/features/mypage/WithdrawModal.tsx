@@ -9,7 +9,7 @@ import { kakaoWithdraw } from '@/apis/auth';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { BaseModal } from '@/components/common/BaseModal';
 import { ENV } from '@/constants/env';
-import { logout } from '@/store/authSlice';
+import { clearAuth } from '@/store/authSlice';
 import type { RootState } from '@/store/store';
 
 interface Props {
@@ -45,7 +45,7 @@ export const WithdrawModal = ({ isOpen, onClose }: Props) => {
         delete axiosInstance.defaults.headers.common.Authorization;
       }
 
-      dispatch(logout());
+      dispatch(clearAuth());
       await queryClient.cancelQueries();
       queryClient.removeQueries({ predicate: () => true });
 
