@@ -59,7 +59,6 @@ export const LoginPage = () => {
   const handleDemoLogin = async (scenario: 'noPet' | 'hasPet') => {
     await demoLogin(scenario);
     dispatch(requestRecheck()); // ✅ 부팅 트리거 강제
-    navigate('/', { replace: true }); // ✅ SPA 이동 (full reload 금지)
   };
 
   return (

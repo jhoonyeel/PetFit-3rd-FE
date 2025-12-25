@@ -54,7 +54,15 @@ export const StateGuard = ({ requireMemberId = true, requireSelectedPet = true }
 
     // 3) 모든 조건 충족 → 통과
     setChecked(true);
-  }, [requireMemberId, requireSelectedPet, memberId, selectedPetId, dispatch, navigate]);
+  }, [
+    authStatus,
+    requireMemberId,
+    requireSelectedPet,
+    memberId,
+    selectedPetId,
+    dispatch,
+    navigate,
+  ]);
 
   if (authStatus === 'checking' || authStatus === 'idle') return null;
   if (!checked) return null; // 보정 중에는 화면 미표시

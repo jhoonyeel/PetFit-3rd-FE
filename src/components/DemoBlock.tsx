@@ -16,6 +16,7 @@ const Wrapper = styled.div`
   height: fit-content;
   pointer-events: none;
   user-select: none; /* 데모 블록 전체에 적용 */
+  cursor: not-allowed;
 `;
 
 const Overlay = styled.div`
