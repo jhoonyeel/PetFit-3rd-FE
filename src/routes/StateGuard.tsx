@@ -23,10 +23,14 @@ export const StateGuard = ({ requireMemberId = true, requireSelectedPet = true }
 
   const memberId = useSelector((s: RootState) => s.user.memberId);
   const selectedPetId = useSelector((s: RootState) => s.selectedPet.id);
+  const authStatus = useSelector((s: RootState) => s.auth.status);
 
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
+    // ✅ 인증 확인 중이면 가드 판단 유예
+    if (authStatus === 'checking' || authStatus === 'idle') return;
+
     // 1) memberId 요구 시 → Redux 상태만 확인
     if (requireMemberId && memberId == null) {
       localStorage.removeItem('selectedPetId');
@@ -52,6 +56,7 @@ export const StateGuard = ({ requireMemberId = true, requireSelectedPet = true }
     setChecked(true);
   }, [requireMemberId, requireSelectedPet, memberId, selectedPetId, dispatch, navigate]);
 
+  if (authStatus === 'checking' || authStatus === 'idle') return null;
   if (!checked) return null; // 보정 중에는 화면 미표시
   return <Outlet />;
 };
