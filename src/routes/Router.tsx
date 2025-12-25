@@ -24,6 +24,7 @@ import { AIReportPage } from '@/pages/AIReportPage';
 import { AIReportListPage } from '@/pages/AIReportListPage';
 import { AIReportDetailPage } from '@/pages/AIReportDetailPage';
 import { AlarmUnreadPage } from '@/pages/AlarmUnreadPage';
+import { OnboardingOnly } from './OnboardingOnly';
 
 export const router = createBrowserRouter([
   // ── Public 영역: 로그인/리다이렉트 등 ─────────────────────────────
@@ -71,13 +72,18 @@ export const router = createBrowserRouter([
       },
       // 온보딩 섹션: memberId만 필요, selectedPetId 불필요
       {
-        element: <StateGuard requireMemberId requireSelectedPet={false} />,
+        element: <OnboardingOnly />,
         children: [
           {
-            element: <PlainLayout />,
+            element: <StateGuard requireMemberId requireSelectedPet={false} />,
             children: [
-              { path: '/signup/pet', element: <SignupPetRegisterPage /> },
-              { path: '/slot', element: <SlotSettingPage /> },
+              {
+                element: <PlainLayout />,
+                children: [
+                  { path: '/signup/pet', element: <SignupPetRegisterPage /> },
+                  { path: '/slot', element: <SlotSettingPage /> },
+                ],
+              },
             ],
           },
         ],
