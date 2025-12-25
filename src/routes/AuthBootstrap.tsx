@@ -1,4 +1,5 @@
 import { getAuthMe } from '@/apis/auth';
+import { getPets } from '@/apis/pet';
 import { ENV } from '@/constants/env';
 import {
   requestRecheck,
@@ -7,6 +8,7 @@ import {
   setUnauthenticated,
   startAuthCheck,
 } from '@/store/authSlice';
+import { setSelectedPetId } from '@/store/petSlice';
 import type { RootState } from '@/store/store';
 import { setUser } from '@/store/userSlice';
 import { useEffect } from 'react';
@@ -32,10 +34,36 @@ export const AuthBootstrap = () => {
 
     const run = async () => {
       dispatch(startAuthCheck());
+
       try {
         const { memberId, hasPet } = await getAuthMe();
         dispatch(setUser({ memberId, email: null, nickname: null })); // 유지해도 됨(프로필은 별개)
-        dispatch(hasPet ? setAuthenticated() : setOnboarding());
+
+        // ✅ 신규(펫 없음) → 온보딩
+        if (!hasPet) {
+          localStorage.removeItem('selectedPetId');
+          dispatch(setOnboarding());
+          return;
+        }
+
+        const pets = await getPets(); // ✅ Pet[] 확정
+
+        if (pets.length === 0) {
+          localStorage.removeItem('selectedPetId');
+          dispatch(setOnboarding());
+          return;
+        }
+
+        const stored = localStorage.getItem('selectedPetId');
+        const storedId = stored ? Number(stored) : null;
+        const validStored = storedId != null && pets.some(p => p.id === storedId);
+
+        const nextSelected = validStored
+          ? storedId!
+          : pets.slice().sort((a, b) => Number(b.isFavorite) - Number(a.isFavorite))[0].id;
+
+        dispatch(setSelectedPetId(nextSelected));
+        dispatch(setAuthenticated());
       } catch {
         dispatch(setUnauthenticated('Auth_Me_Failed'));
       }

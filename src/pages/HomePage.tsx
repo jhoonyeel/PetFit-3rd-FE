@@ -5,12 +5,12 @@ import { Bell } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { getPets, type PetApiResponse } from '@/apis/pet';
+import { getPets } from '@/apis/pet';
 import { TodayBar } from '@/features/home/TodayBar';
 import { Routine } from '@/features/routine/Routine';
 import { setSelectedPetId } from '@/store/petSlice';
 import type { RootState } from '@/store/store';
-import type { PetListType } from '@/types/pet';
+import type { PetInfo, PetListType } from '@/types/pet';
 
 import Logo from '@/assets/icons/logo.svg?react';
 import { BriefFeature } from '@/features/home/BriefFeature';
@@ -18,6 +18,7 @@ import { Tutorial } from '@/features/home/Tutorial';
 import { useUnreadAlarms } from '@/hooks/useUnreadAlarms';
 import { tx } from '@/styles/typography';
 import { useNavigate } from 'react-router-dom';
+import { toUiPetInfo } from '@/utils/transform/pet';
 
 export const HomePage = () => {
   const dispatch = useDispatch();
@@ -25,30 +26,30 @@ export const HomePage = () => {
 
   const { data: pets = [] } = useQuery({
     queryKey: ['pets'],
-    queryFn: () => getPets(),
+    queryFn: getPets,
     staleTime: 1000 * 60 * 5,
+    select: dtos =>
+      dtos
+        .slice()
+        .sort((a, b) => Number(b.isFavorite) - Number(a.isFavorite))
+        .map(toUiPetInfo),
   });
-
-  // 대표 동물을 맨 앞으로 설정
-  const sortedPets = pets
-    .slice()
-    .sort((a: PetListType, b: PetListType) => Number(b.isFavorite) - Number(a.isFavorite));
 
   // redux에서 현재 선택된 petId 가져오기
   const selectedPetId = useSelector((s: RootState) => s.petSession.selectedPetId);
-  const selectedPet = sortedPets.find((pet: PetApiResponse) => pet.id === selectedPetId);
+  const selectedPet = pets.find((pet: PetInfo) => pet.id === selectedPetId);
 
   // selectedPetId가 대표 동물로 설정
   useEffect(() => {
-    if (sortedPets.length > 0 && selectedPetId === null) {
-      const firstPet = sortedPets[0];
+    if (pets.length > 0 && selectedPetId === null) {
+      const firstPet = pets[0];
       dispatch(setSelectedPetId(firstPet.id));
       localStorage.setItem('selectedPetId', String(firstPet.id));
     }
-  }, [sortedPets, selectedPetId, dispatch]);
+  }, [pets, selectedPetId, dispatch]);
 
   const handleSelectPet = (id: number) => {
-    const pet = sortedPets.find((p: PetListType) => p.id === id);
+    const pet = pets.find((p: PetListType) => p.id === id);
     if (pet) {
       dispatch(setSelectedPetId(pet.id));
       localStorage.setItem('selectedPetId', String(pet.id));
@@ -85,7 +86,7 @@ export const HomePage = () => {
       </Header>
 
       <TopSection>
-        <TodayBar pets={sortedPets} selectedPetId={selectedPetId} onSelect={handleSelectPet} />
+        <TodayBar pets={pets} selectedPetId={selectedPetId} onSelect={handleSelectPet} />
       </TopSection>
 
       {selectedPet && (
