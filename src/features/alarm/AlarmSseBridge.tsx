@@ -7,12 +7,13 @@ import type { RootState } from '@/store/store';
 import { sseConnecting, sseOpen, sseEvent, sseError, sseClosed } from '@/store/sseSlice';
 import { showAlert, useToast } from '@/ds/ToastProvider';
 import type { AlarmDto } from '@/types/alarm.dto';
+import { ENV } from '@/constants/env';
 
 export function AlarmSseBridge() {
   const qc = useQueryClient();
   const dispatch = useDispatch();
   const toast = useToast();
-  const petId = useSelector((s: RootState) => s.selectedPet.id);
+  const petId = useSelector((s: RootState) => s.petSession.selectedPetId);
   const authStatus = useSelector((s: RootState) => s.auth.status);
 
   const esRef = useRef<EventSource | null>(null);
@@ -21,10 +22,11 @@ export function AlarmSseBridge() {
 
   useEffect(() => {
     // ✅ authenticated가 아니면 SSE 금지 (onboarding 포함)
-    if (authStatus !== 'authenticated' || petId == null) {
+    if ((!ENV.IS_DEMO && authStatus !== 'authenticated') || petId == null) {
       cleanup();
       return;
     }
+
     connect(petId);
     return () => cleanup();
     // eslint-disable-next-line react-hooks/exhaustive-deps

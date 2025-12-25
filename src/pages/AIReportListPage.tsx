@@ -18,7 +18,7 @@ export const AIReportListPage = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [deleteList, setDeleteList] = useState<number[]>([]);
 
-  const selectedPetId = useSelector((s: RootState) => s.selectedPet.id);
+  const selectedPetId = useSelector((s: RootState) => s.petSession.selectedPetId);
   const { data: pet } = useQuery({
     queryKey: ['pet', selectedPetId],
     queryFn: () => getPetById(selectedPetId as number),

@@ -5,10 +5,10 @@ import { Bell } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { getPets, type Pet } from '@/apis/pets';
+import { getPets, type PetApiResponse } from '@/apis/pets';
 import { TodayBar } from '@/features/home/TodayBar';
 import { Routine } from '@/features/routine/Routine';
-import { setSelectedPet, type SelectedPetState } from '@/store/petSlice';
+import { setSelectedPetId } from '@/store/petSlice';
 import type { RootState } from '@/store/store';
 import type { PetListType } from '@/types/pets';
 
@@ -18,14 +18,6 @@ import { Tutorial } from '@/features/home/Tutorial';
 import { useUnreadAlarms } from '@/hooks/useUnreadAlarms';
 import { tx } from '@/styles/typography';
 import { useNavigate } from 'react-router-dom';
-
-const convertToSelectedPet = (pet: Pet): SelectedPetState => ({
-  id: pet.id,
-  name: pet.name,
-  species: pet.type, // type → species로 매핑
-  gender: '남아', // 임시 기본값 설정.
-  birthDate: new Date(), // 임시 기본값 설정. 추후 API 응답 수정 필요.
-});
 
 export const HomePage = () => {
   const dispatch = useDispatch();
@@ -43,14 +35,14 @@ export const HomePage = () => {
     .sort((a: PetListType, b: PetListType) => Number(b.isFavorite) - Number(a.isFavorite));
 
   // redux에서 현재 선택된 petId 가져오기
-  const selectedPetId = useSelector((state: RootState) => state.selectedPet.id);
-  const selectedPet = sortedPets.find((pet: Pet) => pet.id === selectedPetId);
+  const selectedPetId = useSelector((s: RootState) => s.petSession.selectedPetId);
+  const selectedPet = sortedPets.find((pet: PetApiResponse) => pet.id === selectedPetId);
 
   // selectedPetId가 대표 동물로 설정
   useEffect(() => {
     if (sortedPets.length > 0 && selectedPetId === null) {
       const firstPet = sortedPets[0];
-      dispatch(setSelectedPet(convertToSelectedPet(firstPet)));
+      dispatch(setSelectedPetId(firstPet.id));
       localStorage.setItem('selectedPetId', String(firstPet.id));
     }
   }, [sortedPets, selectedPetId, dispatch]);
@@ -58,7 +50,7 @@ export const HomePage = () => {
   const handleSelectPet = (id: number) => {
     const pet = sortedPets.find((p: PetListType) => p.id === id);
     if (pet) {
-      dispatch(setSelectedPet(convertToSelectedPet(pet)));
+      dispatch(setSelectedPetId(pet.id));
       localStorage.setItem('selectedPetId', String(pet.id));
     }
   };

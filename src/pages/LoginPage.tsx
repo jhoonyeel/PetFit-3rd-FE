@@ -60,7 +60,9 @@ export const LoginPage = () => {
 
   const handleDemoLogin = async (scenario: 'noPet' | 'hasPet') => {
     if (demoLoading || isChecking) return;
+
     try {
+      localStorage.removeItem('selectedPetId'); // ✅ 시나리오 전환 시 찌꺼기 제거
       setDemoLoading(true);
       await demoLogin(scenario); // 1) 쿠키 심기
       dispatch(requestRecheck()); // 2) /auth/me 트리거 -> checking
@@ -97,16 +99,18 @@ export const LoginPage = () => {
             ))}
           </Dots>
         </Slider>
-        <DemoBlock>
-          <KakaoButton onClick={handleKakaoLogin}>
-            <img
-              src="/kakao_login_medium_wide.png"
-              alt="카카오로 시작하기"
-              loading="lazy"
-              decoding="async"
-            />
-          </KakaoButton>
-        </DemoBlock>
+        <ButtonWrap>
+          <DemoBlock>
+            <KakaoButton onClick={handleKakaoLogin}>
+              <img
+                src="/kakao_login_medium_wide.png"
+                alt="카카오로 시작하기"
+                loading="lazy"
+                decoding="async"
+              />
+            </KakaoButton>
+          </DemoBlock>
+        </ButtonWrap>
       </BlurWrap>
 
       {/* ✅ DEMO idle: 상태를 명시하는 오버레이 */}
@@ -191,8 +195,11 @@ const Dot = styled.button<{ $active: boolean }>`
   background: ${({ theme, $active }) => ($active ? theme.color.main[500] : theme.color.gray[300])};
 `;
 
-const KakaoButton = styled.button`
+const ButtonWrap = styled.div`
   margin-top: 20px;
+`;
+
+const KakaoButton = styled.button`
   padding: 0;
 
   img {

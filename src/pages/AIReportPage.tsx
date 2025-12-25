@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const AIReportPage = () => {
   const navigate = useNavigate();
-  const selectedPetId = useSelector((s: RootState) => s.selectedPet.id);
+  const selectedPetId = useSelector((s: RootState) => s.petSession.selectedPetId);
 
   const { data: pet } = useQuery({
     queryKey: ['pet', selectedPetId],

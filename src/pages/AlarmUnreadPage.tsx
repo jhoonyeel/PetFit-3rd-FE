@@ -11,7 +11,7 @@ import type { AlarmDto, AlarmId } from '@/types/alarm.dto';
 import { tx } from '@/styles/typography';
 
 export const AlarmUnreadPage = () => {
-  const petId = useSelector((s: RootState) => s.selectedPet.id);
+  const petId = useSelector((s: RootState) => s.petSession.selectedPetId);
   const qc = useQueryClient();
 
   const queryKey = ['alarms', 'unread', petId] as const;

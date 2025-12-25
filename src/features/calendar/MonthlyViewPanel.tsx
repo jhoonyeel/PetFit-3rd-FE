@@ -22,7 +22,7 @@ interface MonthlyViewPanelProps {
 export const MonthlyViewPanel = ({ selectedDate, onDateClick }: MonthlyViewPanelProps) => {
   // ✅ 로컬 뷰 상태(현재 보고 있는 월)
   const [viewMonth, setViewMonth] = useState<Date>(new Date(selectedDate));
-  const selectedPetId = useSelector((state: RootState) => state.selectedPet.id);
+  const selectedPetId = useSelector((s: RootState) => s.petSession.selectedPetId);
 
   // ✅ 주변 3개월(이전/현재/다음) 키 생성 — viewMonth 기준
   const formattedMonths = useMemo(() => getSurroundingMonths(viewMonth), [viewMonth]);

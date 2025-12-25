@@ -21,7 +21,7 @@ interface DayDetailsPanelProps {
 }
 
 export const DayDetailsPanel = ({ selectedDate }: DayDetailsPanelProps) => {
-  const selectedPetId = useSelector((state: RootState) => state.selectedPet.id);
+  const selectedPetId = useSelector((s: RootState) => s.petSession.selectedPetId);
   const formattedDate = formatDate(selectedDate); // 'YYYY-MM-DD'
 
   // ✅ 일간 특이사항 + 루틴 조회 API 호출

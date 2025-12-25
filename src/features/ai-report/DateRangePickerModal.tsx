@@ -21,14 +21,14 @@ interface Props {
 export const DateRangePickerModal = ({ isOpen, onClose }: Props) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const selectedPetId = useSelector((s: RootState) => s.selectedPet.id);
+  const selectedPetId = useSelector((s: RootState) => s.petSession.selectedPetId);
 
   const [range, setRange] = useState({
     startDate: new Date(),
     endDate: new Date(),
   });
   const [isLoadingModalOpen, setIsLoadingModalOpen] = useState(false);
-  const petId = useSelector((state: RootState) => state.selectedPet.id);
+  const petId = useSelector((s: RootState) => s.petSession.selectedPetId);
 
   // 보고서 생성 요청
   const { mutate: generateReport } = useMutation({

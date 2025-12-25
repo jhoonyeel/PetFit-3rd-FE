@@ -13,7 +13,7 @@ import { tx } from '@/styles/typography';
 import { Plus } from 'lucide-react';
 
 export const AlarmPage = () => {
-  const petId = useSelector((s: RootState) => s.selectedPet.id);
+  const petId = useSelector((s: RootState) => s.petSession.selectedPetId);
   const pid = petId ?? -1;
 
   // 서버 조회(SSOT)

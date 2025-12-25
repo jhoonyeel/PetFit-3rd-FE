@@ -7,7 +7,7 @@ import userReducer from './userSlice';
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    selectedPet: petReducer,
+    petSession: petReducer,
     user: userReducer,
   },
 });

@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { PetRegisterForm } from '@/components/PetRegisterForm';
 import { useRegisterPet } from '@/hooks/useRegisterPet';
-import { setSelectedPet, setSelectedPetId } from '@/store/petSlice';
+import { setSelectedPetId } from '@/store/petSlice';
 import { tx } from '@/styles/typography';
 import { usePetForm } from '@/hooks/usePetForm';
 import { Button } from '@/ds/Button';
@@ -34,7 +34,6 @@ export const SignupPetRegisterPage = () => {
     const petInfo = await register(form); // ✅ id 포함 결과
 
     if (petInfo) {
-      dispatch(setSelectedPet(petInfo)); // ✅ 전역 상태로 저장
       dispatch(setSelectedPetId(petInfo.id)); // localStorage에 id만 따로 저장
       ENV.IS_DEMO ? navigate('/') : navigate('/slot?flow=signup');
     } else if (error) {

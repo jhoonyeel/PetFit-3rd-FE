@@ -12,7 +12,7 @@ import remarkGfm from 'remark-gfm';
 
 export const AIReportDetailPage = () => {
   const { reportId } = useParams<{ reportId: string }>();
-  const selectedPetId = useSelector((s: RootState) => s.selectedPet.id);
+  const selectedPetId = useSelector((s: RootState) => s.petSession.selectedPetId);
 
   useEffect(() => {
     document.documentElement.style.overflow = 'auto';

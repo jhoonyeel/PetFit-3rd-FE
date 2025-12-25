@@ -6,19 +6,11 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { getPets, putFavorite, type Pet } from '@/apis/pets';
+import { getPets, putFavorite } from '@/apis/pets';
 import { TitleHeader } from '@/components/common/TitleHeader';
-import { setSelectedPet, type SelectedPetState } from '@/store/petSlice';
+import { setSelectedPetId } from '@/store/petSlice';
 import type { PetListType } from '@/types/pets';
 import { tx } from '@/styles/typography';
-
-const convertToSelectedPet = (pet: Pet): SelectedPetState => ({
-  id: pet.id,
-  name: pet.name,
-  species: pet.type, // type → species로 매핑
-  gender: '남아', // 임시 기본값 설정.
-  birthDate: new Date(), // 임시 기본값 설정. 추후 API 응답 수정 필요.
-});
 
 export const PetManagementPage: React.FC = () => {
   const navigate = useNavigate();
@@ -38,7 +30,7 @@ export const PetManagementPage: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ['pets'] });
       const pet = pets.find((p: PetListType) => p.id === petId);
       if (pet) {
-        dispatch(setSelectedPet(convertToSelectedPet(pet)));
+        dispatch(setSelectedPetId(pet.id));
         localStorage.setItem('selectedPetId', String(petId));
       }
     },

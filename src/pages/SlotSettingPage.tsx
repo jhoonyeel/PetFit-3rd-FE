@@ -26,7 +26,7 @@ export const SlotSettingPage = () => {
   const [param] = useSearchParams();
   const showBack = param.get('flow') !== 'signup';
 
-  const selectedPetId = useSelector((state: RootState) => state.selectedPet.id);
+  const selectedPetId = useSelector((s: RootState) => s.petSession.selectedPetId);
 
   // 슬롯 설정 가져오기
   useEffect(() => {
