@@ -5,9 +5,10 @@ import Logo from '@/assets/icons/logo.svg?react';
 import { useMemo, useRef, useState } from 'react';
 import { ENV } from '@/constants/env';
 import { demoLogin } from '@/apis/auth';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { DemoBlock } from '@/components/DemoBlock';
 import { requestRecheck } from '@/store/authSlice';
+import type { RootState } from '@/store/store';
 
 export const LoginPage = () => {
   const slides = useMemo(
@@ -26,9 +27,16 @@ export const LoginPage = () => {
   );
 
   const [index, setIndex] = useState(0);
+  const [demoLoading, setDemoLoading] = useState(false);
+
   const trackRef = useRef<HTMLDivElement | null>(null);
   const startX = useRef<number | null>(null);
   const dispatch = useDispatch();
+
+  const authStatus = useSelector((s: RootState) => s.auth.status);
+
+  const isDemoGate = ENV.IS_DEMO && authStatus === 'idle';
+  const isChecking = authStatus === 'checking';
 
   const go = (i: number) => setIndex(Math.max(0, Math.min(i, slides.length - 1)));
 
@@ -51,50 +59,77 @@ export const LoginPage = () => {
   };
 
   const handleDemoLogin = async (scenario: 'noPet' | 'hasPet') => {
-    await demoLogin(scenario);
-    dispatch(requestRecheck()); // ✅ 부팅 트리거 강제
+    if (demoLoading || isChecking) return;
+    try {
+      setDemoLoading(true);
+      await demoLogin(scenario); // 1) 쿠키 심기
+      dispatch(requestRecheck()); // 2) /auth/me 트리거 -> checking
+    } catch (e) {
+      console.warn(e);
+    } finally {
+      setDemoLoading(false);
+    }
   };
 
   return (
     <Container>
-      <Logo width={60} height={'auto'} />
-      <Slider>
-        <Track
-          ref={trackRef}
-          draggable
-          onDragStart={onDragStart}
-          onDragEnd={onDragEnd}
-          style={{ transform: `translateX(-${index * 100}%)` }}
-        >
-          {slides.map((s, i) => (
-            <Slide key={i}>
-              <Img src={s.img} alt="" loading="lazy" decoding="async" draggable={false} />
-              <Desc dangerouslySetInnerHTML={{ __html: s.text.replace(/\n/g, '<br/>') }} />
-            </Slide>
-          ))}
-        </Track>
+      <BlurWrap $on={isDemoGate}>
+        <Logo width={60} height={'auto'} />
+        <Slider>
+          <Track
+            ref={trackRef}
+            draggable
+            onDragStart={onDragStart}
+            onDragEnd={onDragEnd}
+            style={{ transform: `translateX(-${index * 100}%)` }}
+          >
+            {slides.map((s, i) => (
+              <Slide key={i}>
+                <Img src={s.img} alt="" loading="lazy" decoding="async" draggable={false} />
+                <Desc dangerouslySetInnerHTML={{ __html: s.text.replace(/\n/g, '<br/>') }} />
+              </Slide>
+            ))}
+          </Track>
 
-        <Dots>
-          {slides.map((_, i) => (
-            <Dot key={i} $active={i === index} onClick={() => go(i)} />
-          ))}
-        </Dots>
-      </Slider>
-      <DemoBlock>
-        <KakaoButton onClick={handleKakaoLogin}>
-          <img
-            src="/kakao_login_medium_wide.png"
-            alt="카카오로 시작하기"
-            loading="lazy"
-            decoding="async"
-          />
-        </KakaoButton>
-      </DemoBlock>
-      {ENV.IS_DEMO && (
-        <DemoButtons>
-          <button onClick={() => handleDemoLogin('noPet')}>DEMO: 신규 유저(온보딩)</button>
-          <button onClick={() => handleDemoLogin('hasPet')}>DEMO: 기존 유저(홈)</button>
-        </DemoButtons>
+          <Dots>
+            {slides.map((_, i) => (
+              <Dot key={i} $active={i === index} onClick={() => go(i)} />
+            ))}
+          </Dots>
+        </Slider>
+        <DemoBlock>
+          <KakaoButton onClick={handleKakaoLogin}>
+            <img
+              src="/kakao_login_medium_wide.png"
+              alt="카카오로 시작하기"
+              loading="lazy"
+              decoding="async"
+            />
+          </KakaoButton>
+        </DemoBlock>
+      </BlurWrap>
+
+      {/* ✅ DEMO idle: 상태를 명시하는 오버레이 */}
+      {isDemoGate && (
+        <GateOverlay>
+          <GateCard>
+            <GateTitle>DEMO MODE</GateTitle>
+            <GateDesc>
+              시나리오를 선택하면 데모 세션을 준비한 뒤 <b>/auth/me</b>로 판정합니다.
+            </GateDesc>
+
+            <GateButtons>
+              <GateButton disabled={demoLoading} onClick={() => handleDemoLogin('noPet')}>
+                DEMO: 신규 유저(온보딩)
+              </GateButton>
+              <GateButton disabled={demoLoading} onClick={() => handleDemoLogin('hasPet')}>
+                DEMO: 기존 유저(홈)
+              </GateButton>
+            </GateButtons>
+
+            {(demoLoading || isChecking) && <GateHint>세션 준비 중...</GateHint>}
+          </GateCard>
+        </GateOverlay>
       )}
     </Container>
   );
@@ -166,6 +201,70 @@ const KakaoButton = styled.button`
   }
 `;
 
-const DemoButtons = styled.div`
-  margin-top: 20px;
+const BlurWrap = styled.div<{ $on: boolean }>`
+  width: 100%;
+  display: contents;
+
+  ${({ $on }) =>
+    $on
+      ? `
+    filter: blur(2px);
+    opacity: 0.6;
+    pointer-events: none;
+  `
+      : ''}
+`;
+
+const GateOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 9999;
+`;
+
+const GateCard = styled.div`
+  width: min(360px, calc(100% - 48px));
+  background: ${({ theme }) => theme.color.white};
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+`;
+
+const GateTitle = styled.h3`
+  margin: 0 0 8px 0;
+  ${tx.title('semi18')};
+`;
+
+const GateDesc = styled.p`
+  margin: 0 0 16px 0;
+  ${tx.body('med13')};
+  color: ${({ theme }) => theme.color.gray[700]};
+  line-height: 1.5;
+`;
+
+const GateButtons = styled.div`
+  display: grid;
+  gap: 10px;
+`;
+
+const GateButton = styled.button`
+  padding: 12px 12px;
+  border-radius: 10px;
+  border: none;
+  background: ${({ theme }) => theme.color.main[500]};
+  color: ${({ theme }) => theme.color.white};
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+`;
+
+const GateHint = styled.div`
+  margin-top: 12px;
+  ${tx.body('med13')};
+  color: ${({ theme }) => theme.color.gray[600]};
 `;

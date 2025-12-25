@@ -1,4 +1,5 @@
 import { getAuthMe } from '@/apis/auth';
+import { ENV } from '@/constants/env';
 import {
   requestRecheck,
   setAuthenticated,
@@ -18,7 +19,11 @@ export const AuthBootstrap = () => {
   const status = useSelector((s: RootState) => s.auth.status);
 
   useEffect(() => {
-    // 최초 진입
+    // ✅ 일반 모드: 부팅 즉시 판정 (idle -> checking)
+    // ✅ DEMO 모드: idle은 "시나리오 선택 대기"이므로 자동 판정 금지
+    if (status !== 'idle') return;
+    if (ENV.IS_DEMO) return;
+
     if (status === 'idle') dispatch(requestRecheck());
   }, [status, dispatch]);
 

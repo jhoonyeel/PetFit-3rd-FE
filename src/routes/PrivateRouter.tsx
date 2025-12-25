@@ -22,6 +22,10 @@ export const PrivateRouter = () => {
 
     // 신규 유저 → 온보딩 페이지
     case 'onboarding':
+      // 이미 온보딩 경로면 통과
+      if (location.pathname.startsWith('/signup') || location.pathname === '/slot') {
+        return <Outlet />;
+      }
       return <Navigate to="/signup/pet" replace />;
 
     // 인증 성공 → 보호 라우트 컴포넌트 렌더
