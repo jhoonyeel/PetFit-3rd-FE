@@ -7,7 +7,6 @@ import { ENV } from '@/constants/env';
 import { demoLogin } from '@/apis/auth';
 import { useDispatch } from 'react-redux';
 import { DemoBlock } from '@/components/DemoBlock';
-import { useNavigate } from 'react-router-dom';
 import { requestRecheck } from '@/store/authSlice';
 
 export const LoginPage = () => {
@@ -30,7 +29,6 @@ export const LoginPage = () => {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const startX = useRef<number | null>(null);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const go = (i: number) => setIndex(Math.max(0, Math.min(i, slides.length - 1)));
 
@@ -48,10 +46,6 @@ export const LoginPage = () => {
   };
 
   const handleKakaoLogin = async () => {
-    if (ENV.IS_DEMO) {
-      return;
-    }
-
     const kakaoAuthURI = `https://kauth.kakao.com/oauth/authorize?client_id=${import.meta.env.VITE_APP_KAKAO_APP_KEY}&redirect_uri=${import.meta.env.VITE_APP_KAKAO_REDIRECT_URI}&response_type=code`;
     window.location.href = kakaoAuthURI;
   };
