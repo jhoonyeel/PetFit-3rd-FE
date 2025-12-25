@@ -66,7 +66,7 @@ export const editNickname = async (nickname: string) => {
   }
 };
 
-export type DemoScenario = 'new' | 'existing';
+export type DemoScenario = 'noPet' | 'hasPet';
 
 export const demoLogin = async (scenario: DemoScenario) => {
   await axiosInstance.post('/auth/demo-login', { scenario });
@@ -77,8 +77,8 @@ export const demoLogin = async (scenario: DemoScenario) => {
  */
 export const getAuthMe = async () => {
   const res = await axiosInstance.get('/auth/me');
-  const { memberId, isNewUser } = res.data;
-  return { memberId, isNewUser };
+  const { memberId, hasPet } = res.data;
+  return { memberId, hasPet };
 };
 
 export const refreshAuth = async () => {

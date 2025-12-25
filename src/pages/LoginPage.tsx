@@ -5,9 +5,10 @@ import Logo from '@/assets/icons/logo.svg?react';
 import { useMemo, useRef, useState } from 'react';
 import { ENV } from '@/constants/env';
 import { demoLogin } from '@/apis/auth';
-import { requestRecheck } from '@/store/authSlice';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { DemoBlock } from '@/components/DemoBlock';
+import { useNavigate } from 'react-router-dom';
+import { requestRecheck } from '@/store/authSlice';
 
 export const LoginPage = () => {
   const slides = useMemo(
@@ -55,10 +56,10 @@ export const LoginPage = () => {
     window.location.href = kakaoAuthURI;
   };
 
-  const handleDemoLogin = async (scenario: 'new' | 'existing') => {
+  const handleDemoLogin = async (scenario: 'noPet' | 'hasPet') => {
     await demoLogin(scenario);
-    dispatch(requestRecheck()); // ✅ AuthBootstrap 트리거
-    navigate('/', { replace: true });
+    dispatch(requestRecheck()); // ✅ 부팅 트리거 강제
+    navigate('/', { replace: true }); // ✅ SPA 이동 (full reload 금지)
   };
 
   return (
@@ -86,18 +87,20 @@ export const LoginPage = () => {
           ))}
         </Dots>
       </Slider>
-      <KakaoButton onClick={handleKakaoLogin}>
-        <img
-          src="/kakao_login_medium_wide.png"
-          alt="카카오로 시작하기"
-          loading="lazy"
-          decoding="async"
-        />
-      </KakaoButton>
+      <DemoBlock>
+        <KakaoButton onClick={handleKakaoLogin}>
+          <img
+            src="/kakao_login_medium_wide.png"
+            alt="카카오로 시작하기"
+            loading="lazy"
+            decoding="async"
+          />
+        </KakaoButton>
+      </DemoBlock>
       {ENV.IS_DEMO && (
         <DemoButtons>
-          <button onClick={() => handleDemoLogin('new')}>DEMO: 신규 유저(온보딩)</button>
-          <button onClick={() => handleDemoLogin('existing')}>DEMO: 기존 유저(홈)</button>
+          <button onClick={() => handleDemoLogin('noPet')}>DEMO: 신규 유저(온보딩)</button>
+          <button onClick={() => handleDemoLogin('hasPet')}>DEMO: 기존 유저(홈)</button>
         </DemoButtons>
       )}
     </Container>

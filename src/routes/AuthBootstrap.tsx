@@ -28,9 +28,9 @@ export const AuthBootstrap = () => {
     const run = async () => {
       dispatch(startAuthCheck());
       try {
-        const { memberId, isNewUser } = await getAuthMe();
+        const { memberId, hasPet } = await getAuthMe();
         dispatch(setUser({ memberId, email: null, nickname: null })); // 유지해도 됨(프로필은 별개)
-        dispatch(isNewUser ? setOnboarding() : setAuthenticated());
+        dispatch(hasPet ? setAuthenticated() : setOnboarding());
       } catch {
         dispatch(setUnauthenticated('Auth_Me_Failed'));
       }

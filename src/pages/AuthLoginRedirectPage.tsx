@@ -12,7 +12,7 @@ import { setUser } from '@/store/userSlice';
 
 /**
  * 카카오 인증 후, 리디렉션 준비하는 페이지
- * - 공통: 쿠키 설정/조회 요청, memberId/isNewUser를 기반으로 라우팅
+ * - 공통: 쿠키 설정/조회 요청, memberId/hasPet를 기반으로 라우팅
  */
 export const AuthLoginRedirectPage = () => {
   const navigate = useNavigate();
@@ -32,10 +32,10 @@ export const AuthLoginRedirectPage = () => {
         await kakaoLogin(code);
 
         // 2) Who am I
-        const { memberId, isNewUser } = await getAuthMe();
+        const { memberId, hasPet } = await getAuthMe();
         dispatch(setUser({ memberId, email: null, nickname: null }));
 
-        if (isNewUser) {
+        if (!hasPet) {
           // 온보딩 분기
           dispatch(setOnboarding());
           localStorage.removeItem('selectedPetId'); // (표시용 캐시만 사용 시)
