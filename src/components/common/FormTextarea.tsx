@@ -3,7 +3,7 @@ import { useEffect, useState, type TextareaHTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 import { tx } from '@/styles/typography';
-import type { BaseFieldProps } from '@/types/form';
+import type { BaseFieldProps } from '@/types/pet';
 import { MAX_LENGTH, validators, type ValidationType } from '@/utils/validators';
 
 type NativeTextareaProps = Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'value' | 'onChange'>;
