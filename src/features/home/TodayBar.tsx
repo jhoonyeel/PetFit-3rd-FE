@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
-import { getPetById } from '@/apis/pets';
+import { getPetById } from '@/apis/pet';
 import type { PetListType } from '@/types/pets';
 import { tx } from '@/styles/typography';
 

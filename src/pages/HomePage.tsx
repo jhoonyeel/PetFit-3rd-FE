@@ -5,7 +5,7 @@ import { Bell } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { getPets, type PetApiResponse } from '@/apis/pets';
+import { getPets, type PetApiResponse } from '@/apis/pet';
 import { TodayBar } from '@/features/home/TodayBar';
 import { Routine } from '@/features/routine/Routine';
 import { setSelectedPetId } from '@/store/petSlice';

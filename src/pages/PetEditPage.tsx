@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { deletePet, getPetById, putPetsInfo } from '@/apis/pets';
+import { deletePet, getPetById, putPetsInfo } from '@/apis/pet';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { TitleHeader } from '@/components/common/TitleHeader';
 import { PetRegisterForm } from '@/components/PetRegisterForm';

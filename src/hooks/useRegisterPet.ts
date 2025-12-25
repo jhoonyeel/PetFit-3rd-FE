@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { registerPet } from '@/apis/pets';
+import { registerPet } from '@/apis/pet';
 import type { RootState } from '@/store/store';
 import type { PetForm, PetInfo } from '@/types/form';
 import { handleAxiosError } from '@/utils/handleAxiosError';

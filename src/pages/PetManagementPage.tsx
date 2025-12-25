@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { getPets, putFavorite } from '@/apis/pets';
+import { getPets, putFavorite } from '@/apis/pet';
 import { TitleHeader } from '@/components/common/TitleHeader';
 import { setSelectedPetId } from '@/store/petSlice';
 import type { PetListType } from '@/types/pets';

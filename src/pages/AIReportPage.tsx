@@ -6,7 +6,7 @@ import { tx } from '@/styles/typography';
 import type { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
 import { useQuery } from '@tanstack/react-query';
-import { getPetById } from '@/apis/pets';
+import { getPetById } from '@/apis/pet';
 import { DateRangePickerModal } from '@/features/ai-report/DateRangePickerModal';
 import { getReportList } from '@/apis/ai-report';
 import { useNavigate } from 'react-router-dom';

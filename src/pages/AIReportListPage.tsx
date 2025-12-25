@@ -4,7 +4,7 @@ import { tx } from '@/styles/typography';
 import type { RootState } from '@/store/store';
 import { useSelector } from 'react-redux';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getPetById } from '@/apis/pets';
+import { getPetById } from '@/apis/pet';
 import { getReportList, deleteReport } from '@/apis/ai-report';
 import { useNavigate } from 'react-router-dom';
 import { Sparkles, CircleCheck } from 'lucide-react';

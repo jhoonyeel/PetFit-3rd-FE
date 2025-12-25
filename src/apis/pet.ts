@@ -1,31 +1,8 @@
 import type { ApiResponse } from '@/types/common';
-import type { PetForm, PetInfo, PetType } from '@/types/form';
+import type { PetForm, PetInfo } from '@/types/form';
 import { formatDate } from '@/utils/calendar';
 
 import { axiosInstance } from './axiosInstance';
-
-export interface Pet {
-  id: number;
-  name: string;
-  type: PetType;
-  isFavorite: boolean;
-}
-
-export const getPets = async (): Promise<Pet[]> => {
-  try {
-    const response = await axiosInstance.get<ApiResponse<Pet[]>>(`/pets/list`);
-    return response.data.content;
-  } catch (error) {
-    console.log('pets', error);
-    throw error;
-  }
-};
-
-// 상세 조회 API
-export const getPetById = async (petId: number): Promise<PetApiResponse> => {
-  const res = await axiosInstance.get<ApiResponse<PetApiResponse>>(`/pets/${petId}`);
-  return res.data.content;
-};
 
 export interface PetApiResponse {
   id: number;
@@ -35,6 +12,17 @@ export interface PetApiResponse {
   birthDate: string; // ISO-8601 문자열
   isFavorite: boolean;
 }
+
+export const getPets = async (): Promise<PetApiResponse[]> => {
+  const response = await axiosInstance.get<ApiResponse<PetApiResponse[]>>(`/pets`);
+  return response.data.content;
+};
+
+// 상세 조회 API
+export const getPetById = async (petId: number): Promise<PetApiResponse> => {
+  const res = await axiosInstance.get<ApiResponse<PetApiResponse>>(`/pets/${petId}`);
+  return res.data.content;
+};
 
 export const registerPet = async (memberId: number, form: PetForm): Promise<PetInfo> => {
   const payload = {

@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { getAuthMe, kakaoLogin } from '@/apis/auth';
-import { getPets } from '@/apis/pets';
+import { getPets } from '@/apis/pet';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { setAuthenticated, setOnboarding } from '@/store/authSlice';
 import { setSelectedPetId } from '@/store/petSlice';
