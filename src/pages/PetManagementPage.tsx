@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import { getPets, putFavorite } from '@/apis/pet';
 import { TitleHeader } from '@/components/common/TitleHeader';
 import { setSelectedPetId } from '@/store/petSlice';
-import type { PetListType } from '@/types/pets';
+import type { PetListType } from '@/types/pet';
 import { tx } from '@/styles/typography';
 
 export const PetManagementPage: React.FC = () => {

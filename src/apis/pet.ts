@@ -1,5 +1,5 @@
 import type { ApiResponse } from '@/types/common';
-import type { PetForm, PetInfo } from '@/types/form';
+import type { PetForm, PetGender, PetInfo, PetSpecies } from '@/types/pet';
 import { formatDate } from '@/utils/calendar';
 
 import { axiosInstance } from './axiosInstance';
@@ -7,8 +7,8 @@ import { axiosInstance } from './axiosInstance';
 export interface PetApiResponse {
   id: number;
   name: string;
-  type: string;
-  gender: string;
+  type: PetSpecies;
+  gender: PetGender;
   birthDate: string; // ISO-8601 문자열
   isFavorite: boolean;
 }
@@ -36,10 +36,6 @@ export const registerPet = async (memberId: number, form: PetForm): Promise<PetI
 
   const res = await axiosInstance.post<ApiResponse<PetApiResponse>>('/pets', payload);
 
-  if (!res.data.success || !res.data.content) {
-    throw new Error(res.data.message || '반려동물 등록 실패');
-  }
-
   // ✅ API 응답 → 내부 도메인 타입으로 가공
   const petInfo: PetInfo = {
     id: res.data.content.id,
@@ -47,6 +43,7 @@ export const registerPet = async (memberId: number, form: PetForm): Promise<PetI
     species: res.data.content.type, // API는 type, 내부는 species
     gender: res.data.content.gender,
     birthDate: new Date(res.data.content.birthDate),
+    isFavorite: res.data.content.isFavorite,
   };
 
   return petInfo;
@@ -60,29 +57,17 @@ export const putPetsInfo = async (petId: number, memberId: number | null, form: 
     gender: form.gender,
     birthDate: formatDate(form.birthDate), // string (YYYY-MM-DD)
   };
-  try {
-    await axiosInstance.put(`pets/${petId}`, payload);
-  } catch (error) {
-    console.log('반려동물 정보 수정 failed', error);
-  }
+
+  await axiosInstance.put(`pets/${petId}`, payload);
 };
 
 export const putFavorite = async (petId: number) => {
-  try {
-    await axiosInstance.put('pets/favorites', {
-      petId: petId,
-      isFavorite: true,
-    });
-  } catch (error) {
-    console.log('반려동물 즐겨찾기 수정 failed', error);
-    throw error;
-  }
+  await axiosInstance.put('pets/favorites', {
+    petId: petId,
+    isFavorite: true,
+  });
 };
 
 export const deletePet = async (petId: number) => {
-  try {
-    await axiosInstance.delete(`pets/${petId}`);
-  } catch (error) {
-    console.log('반려동물 삭제 실패');
-  }
+  await axiosInstance.delete(`pets/${petId}`);
 };

@@ -28,7 +28,7 @@ export const StateGuard = ({ requireMemberId = true, requireSelectedPet = true }
 
   const authStatus = useSelector((s: RootState) => s.auth.status);
   const memberId = useSelector((s: RootState) => s.user.memberId);
-  const selectedPetId = useSelector((s: RootState) => s.selectedPet.id);
+  const selectedPetId = useSelector((s: RootState) => s.petSession.selectedPetId);
 
   const [checked, setChecked] = useState(false);
 

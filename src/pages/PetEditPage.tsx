@@ -11,7 +11,7 @@ import { TitleHeader } from '@/components/common/TitleHeader';
 import { PetRegisterForm } from '@/components/PetRegisterForm';
 import type { RootState } from '@/store/store';
 import { tx } from '@/styles/typography';
-import type { PetForm, PetGender, PetType } from '@/types/form';
+import type { PetForm, PetGender, PetSpecies } from '@/types/pet';
 import { usePetForm } from '@/hooks/usePetForm';
 import { BaseModal } from '@/components/common/BaseModal';
 
@@ -44,7 +44,7 @@ export const PetEditPage = () => {
       const dt = d?.birthDate ? new Date(d.birthDate) : new Date();
       return {
         name: d?.name ?? '',
-        species: (d?.type as PetType) ?? '강아지',
+        species: (d?.type as PetSpecies) ?? '강아지',
         gender: (d?.gender as PetGender) ?? '남아',
         birthDate: isNaN(dt.getTime()) ? new Date() : dt,
       } as PetForm;

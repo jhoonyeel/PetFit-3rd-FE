@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 import { registerPet } from '@/apis/pet';
 import type { RootState } from '@/store/store';
-import type { PetForm, PetInfo } from '@/types/form';
+import type { PetForm, PetInfo } from '@/types/pet';
 import { handleAxiosError } from '@/utils/handleAxiosError';
 
 interface UseRegisterPetResult {

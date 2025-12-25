@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 import { getPetById } from '@/apis/pet';
-import type { PetListType } from '@/types/pets';
+import type { PetListType } from '@/types/pet';
 import { tx } from '@/styles/typography';
 
 type Props = {

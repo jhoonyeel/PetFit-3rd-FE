@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import type { PetListType } from '@/types/pets';
+import type { PetListType } from '@/types/pet';
 
 interface NameTagBarProps {
   names: PetListType[];

@@ -10,7 +10,7 @@ import { TodayBar } from '@/features/home/TodayBar';
 import { Routine } from '@/features/routine/Routine';
 import { setSelectedPetId } from '@/store/petSlice';
 import type { RootState } from '@/store/store';
-import type { PetListType } from '@/types/pets';
+import type { PetListType } from '@/types/pet';
 
 import Logo from '@/assets/icons/logo.svg?react';
 import { BriefFeature } from '@/features/home/BriefFeature';

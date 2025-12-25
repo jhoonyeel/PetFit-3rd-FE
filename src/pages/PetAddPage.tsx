@@ -8,7 +8,7 @@ import { TitleHeader } from '@/components/common/TitleHeader';
 import { PetRegisterForm } from '@/components/PetRegisterForm';
 import { useRegisterPet } from '@/hooks/useRegisterPet';
 import { setSelectedPetId } from '@/store/petSlice';
-import type { PetForm } from '@/types/form';
+import type { PetForm } from '@/types/pet';
 import { usePetForm } from '@/hooks/usePetForm';
 import { tx } from '@/styles/typography';
 
