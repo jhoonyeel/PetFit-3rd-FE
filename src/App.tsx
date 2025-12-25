@@ -18,14 +18,17 @@ const AppInitializer = () => {
   const authStatus = useSelector((s: RootState) => s.auth.status);
 
   useEffect(() => {
-    // 로그인 상태일 때만 selectedPetId 캐시 복원 (불필요한 오염 방지)
-    if (authStatus === 'authenticated' || authStatus === 'onboarding') {
-      const storedPetId = localStorage.getItem('selectedPetId');
+    // ✅ authenticated일 때만 펫ID 복원 (onboarding은 복원 대상 아님)
+    if (authStatus === 'authenticated') {
+      const storedPetId = localStorage.getItem('selectedPetId'); // ✅ SSOT 키
       if (storedPetId) {
-        dispatch(setSelectedPetId(Number(storedPetId)));
+        const id = Number(storedPetId);
+        if (!Number.isNaN(id)) {
+          dispatch(setSelectedPetId(id)); // id 전용 저장 reducer 사용
+        }
       }
     }
-  }, [dispatch, authStatus]);
+  }, [authStatus, dispatch]);
 
   return null;
 };

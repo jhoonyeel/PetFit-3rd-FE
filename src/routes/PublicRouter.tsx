@@ -25,11 +25,11 @@ export const PublicRouter = () => {
     case 'checking':
       return <LoadingSpinner />;
 
-    case 'authenticated':
-      return <Navigate to="/" replace />;
-
     case 'onboarding':
       return <Navigate to="/signup/pet" replace />;
+
+    case 'authenticated':
+      return <Navigate to="/" replace />;
 
     // unauthenticated → 접근 허용
     case 'unauthenticated':
