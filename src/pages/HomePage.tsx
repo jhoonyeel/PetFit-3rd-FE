@@ -95,7 +95,7 @@ export const HomePage = () => {
           <BriefFeature petId={selectedPet.id} today={today} />
 
           <DemoBlock>
-            <div>
+            <div style={{ width: '100%' }}>
               <Routine petId={selectedPet.id} />
             </div>
           </DemoBlock>
