@@ -19,6 +19,7 @@ import { useUnreadAlarms } from '@/hooks/useUnreadAlarms';
 import { tx } from '@/styles/typography';
 import { useNavigate } from 'react-router-dom';
 import { toUiPetInfo } from '@/utils/transform/pet';
+import { DemoBlock } from '@/components/DemoBlock';
 
 export const HomePage = () => {
   const dispatch = useDispatch();
@@ -44,7 +45,6 @@ export const HomePage = () => {
     if (pets.length > 0 && selectedPetId === null) {
       const firstPet = pets[0];
       dispatch(setSelectedPetId(firstPet.id));
-      localStorage.setItem('selectedPetId', String(firstPet.id));
     }
   }, [pets, selectedPetId, dispatch]);
 
@@ -52,7 +52,6 @@ export const HomePage = () => {
     const pet = pets.find((p: PetListType) => p.id === id);
     if (pet) {
       dispatch(setSelectedPetId(pet.id));
-      localStorage.setItem('selectedPetId', String(pet.id));
     }
   };
 
@@ -79,10 +78,12 @@ export const HomePage = () => {
     <Container>
       <Header>
         <StyledLogo />
-        <BellWrap onClick={() => navigate('/alarm/unread')} aria-label={`미읽음 알림 보기`}>
-          <Bell size={24} />
-          {count > 0 && <Badge>{count > 99 ? '99+' : count}</Badge>}
-        </BellWrap>
+        <DemoBlock>
+          <BellWrap onClick={() => navigate('/alarm/unread')} aria-label={`미읽음 알림 보기`}>
+            <Bell size={24} />
+            {count > 0 && <Badge>{count > 99 ? '99+' : count}</Badge>}
+          </BellWrap>
+        </DemoBlock>
       </Header>
 
       <TopSection>
@@ -93,9 +94,11 @@ export const HomePage = () => {
         <>
           <BriefFeature petId={selectedPet.id} today={today} />
 
-          <div>
-            <Routine petId={selectedPet.id} />
-          </div>
+          <DemoBlock>
+            <div>
+              <Routine petId={selectedPet.id} />
+            </div>
+          </DemoBlock>
         </>
       )}
 
