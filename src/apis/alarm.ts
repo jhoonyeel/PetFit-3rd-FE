@@ -1,6 +1,6 @@
 // apis/alarm.ts
 import { axiosInstance } from './axiosInstance';
-import type { ApiResponse } from '@/types/common';
+import { unwrap, type ApiResponse } from '@/types/common';
 import type {
   AlarmDto,
   CreateAlarmRequestDto,
@@ -16,7 +16,7 @@ export const createAlarm = async (
   body: CreateAlarmRequestDto
 ): Promise<AlarmDto> => {
   const res = await axiosInstance.post<ApiResponse<AlarmDto>>(`/alarms/${petId}`, body);
-  return res.data.content;
+  return unwrap(res.data);
 };
 
 /**
@@ -27,7 +27,7 @@ export const updateAlarm = async (
   body: UpdateAlarmRequestDto
 ): Promise<AlarmDto> => {
   const res = await axiosInstance.patch<ApiResponse<AlarmDto>>(`/alarms/${alarmId}`, body);
-  return res.data.content;
+  return unwrap(res.data);
 };
 
 /**
@@ -35,7 +35,7 @@ export const updateAlarm = async (
  */
 export const deleteAlarm = async (alarmId: AlarmId): Promise<string> => {
   const res = await axiosInstance.delete<ApiResponse<string>>(`/alarms/${alarmId}`);
-  return res.data.content;
+  return unwrap(res.data);
 };
 
 /**
@@ -43,7 +43,7 @@ export const deleteAlarm = async (alarmId: AlarmId): Promise<string> => {
  */
 export const getAllAlarms = async (petId: number): Promise<AlarmDto[]> => {
   const res = await axiosInstance.get<ApiResponse<AlarmDto[]>>(`/alarms/${petId}`);
-  return res.data.content;
+  return unwrap(res.data);
 };
 
 /**
@@ -58,7 +58,7 @@ export const markAlarmRead = async (alarmId: AlarmId): Promise<void> => {
  */
 export const getUnreadAlarms = async (petId: number): Promise<AlarmDto[]> => {
   const res = await axiosInstance.get<ApiResponse<AlarmDto[]>>(`/alarms/${petId}/unread`);
-  return res.data.content;
+  return unwrap(res.data);
 };
 
 /**

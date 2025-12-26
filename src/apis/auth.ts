@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ENV } from '@/constants/env';
 
 import { axiosInstance, refreshAccessToken } from './axiosInstance';
+import { unwrap, type ApiResponse } from '@/types/common';
 
 /**
  * 카카오 로그인 요청
@@ -68,17 +69,17 @@ export const editNickname = async (nickname: string) => {
 
 export type DemoScenario = 'noPet' | 'hasPet';
 
-export const demoLogin = async (scenario: DemoScenario) => {
+export const demoLogin = async (scenario: DemoScenario): Promise<void> => {
   await axiosInstance.post('/auth/demo-login', { scenario });
 };
 
+type AuthMeDto = { memberId: number; hasPet: boolean };
 /**
  * 서버에 쿠키 기반 인증 상태 확인 요청
  */
-export const getAuthMe = async () => {
-  const res = await axiosInstance.get('/auth/me');
-  const { memberId, hasPet } = res.data;
-  return { memberId, hasPet };
+export const getAuthMe = async (): Promise<AuthMeDto> => {
+  const res = await axiosInstance.get<ApiResponse<AuthMeDto>>('/auth/me');
+  return unwrap(res.data);
 };
 
 export const refreshAuth = async () => {

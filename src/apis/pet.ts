@@ -1,4 +1,4 @@
-import type { ApiResponse } from '@/types/common';
+import { unwrap, type ApiResponse } from '@/types/common';
 import type { PetForm, PetGender, PetInfo, PetSpecies } from '@/types/pet';
 import { formatDate } from '@/utils/calendar';
 
@@ -15,13 +15,13 @@ export interface PetApiResponse {
 
 export const getPets = async (): Promise<PetApiResponse[]> => {
   const response = await axiosInstance.get<ApiResponse<PetApiResponse[]>>(`/pets`);
-  return response.data.content;
+  return unwrap(response.data);
 };
 
 // 상세 조회 API
 export const getPetById = async (petId: number): Promise<PetApiResponse> => {
   const res = await axiosInstance.get<ApiResponse<PetApiResponse>>(`/pets/${petId}`);
-  return res.data.content;
+  return unwrap(res.data);
 };
 
 export const registerPet = async (memberId: number, form: PetForm): Promise<PetInfo> => {
@@ -35,15 +35,16 @@ export const registerPet = async (memberId: number, form: PetForm): Promise<PetI
   };
 
   const res = await axiosInstance.post<ApiResponse<PetApiResponse>>('/pets', payload);
+  const dto = unwrap(res.data);
 
   // ✅ API 응답 → 내부 도메인 타입으로 가공
   const petInfo: PetInfo = {
-    id: res.data.content.id,
-    name: res.data.content.name,
-    species: res.data.content.type, // API는 type, 내부는 species
-    gender: res.data.content.gender,
-    birthDate: new Date(res.data.content.birthDate),
-    isFavorite: res.data.content.isFavorite,
+    id: dto.id,
+    name: dto.name,
+    species: dto.type, // API는 type, 내부는 species
+    gender: dto.gender,
+    birthDate: new Date(dto.birthDate),
+    isFavorite: dto.isFavorite,
   };
 
   return petInfo;
