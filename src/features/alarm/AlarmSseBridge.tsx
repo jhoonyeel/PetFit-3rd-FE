@@ -22,7 +22,7 @@ export function AlarmSseBridge() {
 
   useEffect(() => {
     // ✅ authenticated가 아니면 SSE 금지 (onboarding 포함)
-    if ((!ENV.IS_DEMO && authStatus !== 'authenticated') || petId == null) {
+    if (authStatus !== 'authenticated' || petId == null) {
       cleanup();
       return;
     }
