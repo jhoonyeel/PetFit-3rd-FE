@@ -7,7 +7,6 @@ import type { RootState } from '@/store/store';
 import { sseConnecting, sseOpen, sseEvent, sseError, sseClosed } from '@/store/sseSlice';
 import { showAlert, useToast } from '@/ds/ToastProvider';
 import type { AlarmDto } from '@/types/alarm.dto';
-import { ENV } from '@/constants/env';
 
 export function AlarmSseBridge() {
   const qc = useQueryClient();
