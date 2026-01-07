@@ -48,7 +48,7 @@ export const router = createBrowserRouter([
     children: [
       // 메인 섹션: memberId & selectedPetId 모두 필요
       {
-        element: <StateGuard requireMemberId requireSelectedPet />,
+        element: <StateGuard requireAuth requireSelectedPet />,
         children: [
           {
             element: <MainLayout />,
@@ -75,7 +75,7 @@ export const router = createBrowserRouter([
         element: <OnboardingOnly />,
         children: [
           {
-            element: <StateGuard requireMemberId requireSelectedPet={false} />,
+            element: <StateGuard requireAuth requireSelectedPet={false} />,
             children: [
               {
                 element: <PlainLayout />,

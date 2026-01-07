@@ -1,6 +1,7 @@
 import { Home, Clock, Calendar, User, HeartPulse } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+import { DemoBlock } from '../DemoBlock';
 
 export const BottomNav = () => {
   return (
@@ -45,32 +46,34 @@ export const BottomNav = () => {
             </>
           )}
         </StyledLink>
-        <StyledLink to="/aireport">
-          {({ isActive }) => (
-            <>
-              <HeartPulse
-                size={24}
-                strokeWidth={2}
-                color={isActive ? '#facc15' : '#6b7280'}
-                aria-hidden="true"
-              />
-              <Label $active={isActive}>AI 진단</Label>
-            </>
-          )}
-        </StyledLink>
-        <StyledLink to="/mypage">
-          {({ isActive }) => (
-            <>
-              <User
-                size={24}
-                strokeWidth={2}
-                color={isActive ? '#facc15' : '#6b7280'}
-                aria-hidden="true"
-              />
-              <Label $active={isActive}>마이페이지</Label>
-            </>
-          )}
-        </StyledLink>
+        <DemoBlock>
+          <StyledLink to="/aireport">
+            {({ isActive }) => (
+              <>
+                <HeartPulse
+                  size={24}
+                  strokeWidth={2}
+                  color={isActive ? '#facc15' : '#6b7280'}
+                  aria-hidden="true"
+                />
+                <Label $active={isActive}>AI 진단</Label>
+              </>
+            )}
+          </StyledLink>
+          <StyledLink to="/mypage">
+            {({ isActive }) => (
+              <>
+                <User
+                  size={24}
+                  strokeWidth={2}
+                  color={isActive ? '#facc15' : '#6b7280'}
+                  aria-hidden="true"
+                />
+                <Label $active={isActive}>마이페이지</Label>
+              </>
+            )}
+          </StyledLink>
+        </DemoBlock>
       </Inner>
     </Wrapper>
   );
