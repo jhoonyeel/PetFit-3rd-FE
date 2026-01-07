@@ -41,9 +41,9 @@ export const kakaoLogout = async () => {
 /**
  * 카카오 회원탈퇴 (dev/prod 공통)
  */
-export const kakaoWithdraw = async (memberId: number | null) => {
+export const kakaoWithdraw = async () => {
   try {
-    await axios.post(`/auth/kakao/withdraw`, { memberId }, { withCredentials: true });
+    await axios.post(`/auth/kakao/withdraw`, {}, { withCredentials: true });
   } catch (error) {
     console.error('user delete failed: ', error);
     throw error;
@@ -67,18 +67,22 @@ export const editNickname = async (nickname: string) => {
   }
 };
 
-export type DemoScenario = 'noPet' | 'hasPet';
+export type DemoSessionScenario = 'new' | 'existing';
 
-export const demoLogin = async (scenario: DemoScenario): Promise<void> => {
+export const demoLogin = async (scenario: DemoSessionScenario): Promise<void> => {
   await axiosInstance.post('/auth/demo-login', { scenario });
 };
 
-type AuthMeDto = { memberId: number; hasPet: boolean };
+export type AuthMeResponse = {
+  scenario: 'new' | 'existing';
+  onboarding: { petDone: boolean; routineDone: boolean };
+  selectedPetId: number | null;
+};
 /**
  * 서버에 쿠키 기반 인증 상태 확인 요청
  */
-export const getAuthMe = async (): Promise<AuthMeDto> => {
-  const res = await axiosInstance.get<ApiResponse<AuthMeDto>>('/auth/me');
+export const getAuthMe = async (): Promise<AuthMeResponse> => {
+  const res = await axiosInstance.get<ApiResponse<AuthMeResponse>>('/auth/me');
   return unwrap(res.data);
 };
 

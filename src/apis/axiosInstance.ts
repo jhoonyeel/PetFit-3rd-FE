@@ -29,7 +29,7 @@ const NEVER_REFRESH_PATHS = [
 const PROTECTED_PREFIXES = [
   '/pets',
   '/calendar',
-  '/alarm',
+  '/alarms',
   '/ai-report',
   '/members',
   '/remarks',

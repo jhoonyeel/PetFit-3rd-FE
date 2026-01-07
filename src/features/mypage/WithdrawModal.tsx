@@ -1,16 +1,13 @@
 import { useState } from 'react';
-
 import { useQueryClient } from '@tanstack/react-query';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-
 import { kakaoWithdraw } from '@/apis/auth';
 import { axiosInstance } from '@/apis/axiosInstance';
 import { BaseModal } from '@/components/common/BaseModal';
 import { ENV } from '@/constants/env';
 import { clearAuth } from '@/store/authSlice';
-import type { RootState } from '@/store/store';
 
 interface Props {
   isOpen: boolean;
@@ -22,7 +19,6 @@ export const WithdrawModal = ({ isOpen, onClose }: Props) => {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
-  const memberId = useSelector((s: RootState) => s.user.memberId);
   const [loading, setLoading] = useState(false);
 
   const onConfirm = async () => {
@@ -30,13 +26,8 @@ export const WithdrawModal = ({ isOpen, onClose }: Props) => {
     setLoading(true);
 
     try {
-      // 0) 필수 파라미터 가드
-      if (!memberId && memberId !== 0) {
-        throw new Error('memberId가 없습니다.');
-      }
-
       // 1) 회원 탈퇴 요청 (서버에서 계정 삭제 + 세션/쿠키 무효화 권장)
-      await kakaoWithdraw(memberId);
+      await kakaoWithdraw();
 
       // 2) 클라이언트 상태/캐시 정리
       if (ENV.IS_DEV) {

@@ -5,17 +5,17 @@ export type RoutineStatus = 'CHECKED' | 'MEMO' | 'UNCHECKED';
 
 export interface Routine {
   id: SlotId;
-  actualAmount?: number | null;
   category: string;
-  targetAmount: number | string;
-  content: string | null;
   status: RoutineStatus;
+  targetAmount: number | string;
+  actualAmount?: number | null;
+  content: string | null;
   date: string;
 }
 
 // 네이밍 통일 필요
 export const ROUTINE_STATUS = ['CHECKED', 'MEMO', 'UNCHECKED'] as const;
-export type RoutineStatusDto = (typeof ROUTINE_STATUS)[number];
+export type RoutineStatusDto = (typeof ROUTINE_STATUS)[number]; // "CHECKED" | "MEMO" | "UNCHECKED"
 
 export const SLOT_IDS = ['feed', 'water', 'walk', 'potty', 'dental', 'skin'] as const;
 export type RoutineSlotKey = (typeof SLOT_IDS)[number]; // 'feed' | 'water' | ...

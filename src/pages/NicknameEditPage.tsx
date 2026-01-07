@@ -1,21 +1,13 @@
 import { useEffect, useState } from 'react';
-
 import { useQuery } from '@tanstack/react-query';
-import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-
 import { editNickname, getNickname } from '@/apis/auth';
 import { FormInput } from '@/components/common/FormInput';
 import { TitleHeader } from '@/components/common/TitleHeader';
-import type { AppDispatch, RootState } from '@/store/store';
-import { setUser } from '@/store/userSlice';
 
 export const NicknameEditPage = () => {
-  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-
-  const user = useSelector((state: RootState) => state.user);
 
   const { data: userInfo } = useQuery({
     queryKey: ['userInfo'],
@@ -40,7 +32,6 @@ export const NicknameEditPage = () => {
     if (!isValid || !nickname.trim()) return;
 
     await editNickname(nickname);
-    dispatch(setUser({ ...user, nickname }));
     navigate(-1);
   };
   return (

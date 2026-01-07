@@ -24,9 +24,8 @@ export const getPetById = async (petId: number): Promise<PetApiResponse> => {
   return unwrap(res.data);
 };
 
-export const registerPet = async (memberId: number, form: PetForm): Promise<PetInfo> => {
+export const registerPet = async (form: PetForm): Promise<PetInfo> => {
   const payload = {
-    memberId,
     name: form.name,
     type: form.species,
     gender: form.gender,
@@ -50,9 +49,8 @@ export const registerPet = async (memberId: number, form: PetForm): Promise<PetI
   return petInfo;
 };
 
-export const putPetsInfo = async (petId: number, memberId: number | null, form: PetForm) => {
+export const putPetsInfo = async (petId: number, form: PetForm) => {
   const payload = {
-    memberId,
     name: form.name,
     type: form.species,
     gender: form.gender,

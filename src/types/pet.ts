@@ -30,7 +30,6 @@ export interface PetForm extends Omit<PetBase, 'isFavorite'> {}
 export interface PetInfo extends PetBase {
   id: number;
 }
-
 export interface PetListType {
   id: number;
   name: string;

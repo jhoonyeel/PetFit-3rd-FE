@@ -1,15 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
-
 import { deletePet, getPetById, putPetsInfo } from '@/apis/pet';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import { TitleHeader } from '@/components/common/TitleHeader';
 import { PetRegisterForm } from '@/components/PetRegisterForm';
-import type { RootState } from '@/store/store';
 import { tx } from '@/styles/typography';
 import type { PetForm, PetGender, PetSpecies } from '@/types/pet';
 import { usePetForm } from '@/hooks/usePetForm';
@@ -18,8 +14,6 @@ import { BaseModal } from '@/components/common/BaseModal';
 export const PetEditPage = () => {
   const { petId } = useParams<{ petId: string }>();
   const id = Number(petId);
-
-  const memberId = useSelector((state: RootState) => state.user.memberId);
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -61,7 +55,7 @@ export const PetEditPage = () => {
 
   // 수정
   const { mutate: editPet, isPending: isEditing } = useMutation({
-    mutationFn: () => putPetsInfo(Number(petId)!, memberId, form),
+    mutationFn: () => putPetsInfo(Number(petId)!, form),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['petDetail', id] });
       navigate(-1);

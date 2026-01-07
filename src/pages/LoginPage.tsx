@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { DemoBlock } from '@/components/DemoBlock';
 import { requestRecheck } from '@/store/authSlice';
 import type { RootState } from '@/store/store';
+import { setSelectedPetId } from '@/store/petSlice';
 
 export const LoginPage = () => {
   const slides = useMemo(
@@ -58,11 +59,11 @@ export const LoginPage = () => {
     window.location.href = kakaoAuthURI;
   };
 
-  const handleDemoLogin = async (scenario: 'noPet' | 'hasPet') => {
+  const handleDemoLogin = async (scenario: 'new' | 'existing') => {
     if (demoLoading || isChecking) return;
 
     try {
-      localStorage.removeItem('selectedPetId'); // ✅ 시나리오 전환 시 찌꺼기 제거
+      dispatch(setSelectedPetId(null)); // ✅ 시나리오 전환 시 찌꺼기 제거
       setDemoLoading(true);
       await demoLogin(scenario); // 1) 쿠키 심기
       dispatch(requestRecheck()); // 2) /auth/me 트리거 -> checking
@@ -123,10 +124,10 @@ export const LoginPage = () => {
             </GateDesc>
 
             <GateButtons>
-              <GateButton disabled={demoLoading} onClick={() => handleDemoLogin('noPet')}>
+              <GateButton disabled={demoLoading} onClick={() => handleDemoLogin('new')}>
                 DEMO: 신규 유저(온보딩)
               </GateButton>
-              <GateButton disabled={demoLoading} onClick={() => handleDemoLogin('hasPet')}>
+              <GateButton disabled={demoLoading} onClick={() => handleDemoLogin('existing')}>
                 DEMO: 기존 유저(홈)
               </GateButton>
             </GateButtons>
