@@ -33,7 +33,7 @@ export const PetAddPage = () => {
     if (petInfo) {
       dispatch(setSelectedPetId(petInfo.id));
       localStorage.setItem('selectedPetId', String(petInfo.id));
-      navigate('/slot');
+      navigate('/onboarding/slot');
     } else if (error) {
       alert(error);
     }

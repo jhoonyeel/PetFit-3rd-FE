@@ -36,10 +36,13 @@ export const AuthBootstrap = () => {
       try {
         const { onboarding, selectedPetId } = await getAuthMe();
 
-        const canEnterHome = Boolean(onboarding?.petDone && onboarding?.routineDone);
+        const petDone = !!onboarding?.petDone;
+        const routineDone = !!onboarding?.routineDone;
+        const canEnterHome = petDone && routineDone;
+
         if (!canEnterHome) {
           dispatch(setSelectedPetId(null));
-          dispatch(setOnboarding());
+          dispatch(setOnboarding({ petDone, routineDone }));
           return;
         }
 

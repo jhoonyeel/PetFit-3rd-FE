@@ -35,10 +35,10 @@ export const AuthLoginRedirectPage = () => {
         const canEnterHome = petDone && routineDone;
 
         if (!canEnterHome) {
-          dispatch(setOnboarding());
+          dispatch(setOnboarding({ petDone, routineDone }));
           dispatch(setSelectedPetId(null));
 
-          navigate(petDone ? '/slot' : '/signup/pet', { replace: true });
+          navigate(petDone ? '/onboarding/slot' : '/onboarding/pet', { replace: true });
           return;
         }
         // 홈 진입 조건이면: 서버가 준 selectedPetId를 SSOT로 세팅

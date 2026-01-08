@@ -46,34 +46,44 @@ export const BottomNav = () => {
             </>
           )}
         </StyledLink>
-        <DemoBlock>
-          <StyledLink to="/aireport">
-            {({ isActive }) => (
-              <>
-                <HeartPulse
-                  size={24}
-                  strokeWidth={2}
-                  color={isActive ? '#facc15' : '#6b7280'}
-                  aria-hidden="true"
-                />
-                <Label $active={isActive}>AI 진단</Label>
-              </>
-            )}
-          </StyledLink>
-          <StyledLink to="/mypage">
-            {({ isActive }) => (
-              <>
-                <User
-                  size={24}
-                  strokeWidth={2}
-                  color={isActive ? '#facc15' : '#6b7280'}
-                  aria-hidden="true"
-                />
-                <Label $active={isActive}>마이페이지</Label>
-              </>
-            )}
-          </StyledLink>
-        </DemoBlock>
+        <div
+          style={{
+            display: 'inline-flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '30%',
+            height: '100%',
+          }}
+        >
+          <DemoBlock>
+            <StyledLink to="/aireport">
+              {({ isActive }) => (
+                <>
+                  <HeartPulse
+                    size={24}
+                    strokeWidth={2}
+                    color={isActive ? '#facc15' : '#6b7280'}
+                    aria-hidden="true"
+                  />
+                  <Label $active={isActive}>AI 진단</Label>
+                </>
+              )}
+            </StyledLink>
+            <StyledLink to="/mypage">
+              {({ isActive }) => (
+                <>
+                  <User
+                    size={24}
+                    strokeWidth={2}
+                    color={isActive ? '#facc15' : '#6b7280'}
+                    aria-hidden="true"
+                  />
+                  <Label $active={isActive}>마이페이지</Label>
+                </>
+              )}
+            </StyledLink>
+          </DemoBlock>
+        </div>
       </Inner>
     </Wrapper>
   );

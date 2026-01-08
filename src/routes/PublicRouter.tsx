@@ -5,13 +5,7 @@ import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import type { RootState } from '@/store/store';
 import { ENV } from '@/constants/env';
 
-/**
- * 로그인 상태일 때는 접근 불가한 라우트 (예: /login)
- * - authenticated → 홈(/)으로 리디렉션
- * - onboarding → 온보딩 페이지(/signup/pet)로 이동
- * - checking → 로딩 스피너
- * - unauthenticated → children(<Outlet />) 렌더
- */
+// 인증 안 된 유저만 허용, 로그인된 유저는 앱 쉘 /로 리디렉션
 export const PublicRouter = () => {
   const status = useSelector((s: RootState) => s.auth.status);
 
@@ -20,20 +14,18 @@ export const PublicRouter = () => {
     return <Outlet />;
   }
 
-  switch (status) {
-    case 'idle':
-    case 'checking':
-      return <LoadingSpinner />;
-
-    case 'onboarding':
-      return <Navigate to="/signup/pet" replace />;
-
-    case 'authenticated':
-      return <Navigate to="/" replace />;
-
-    // unauthenticated → 접근 허용
-    case 'unauthenticated':
-    default:
-      return <Outlet />;
+  if (status === 'idle' || status === 'checking') {
+    return <LoadingSpinner />;
   }
+
+  // 로그인된 상태(onboarding, authenticated)는 public 소속 아님 → 앱쉘(/)로
+  if (status === 'onboarding') {
+    return <Navigate to="/onboarding/pet" replace />;
+  }
+
+  if (status === 'authenticated') {
+    return <Navigate to="/" replace />;
+  }
+
+  return <Outlet />;
 };

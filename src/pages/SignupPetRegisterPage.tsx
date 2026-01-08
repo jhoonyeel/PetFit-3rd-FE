@@ -35,7 +35,7 @@ export const SignupPetRegisterPage = () => {
 
     if (petInfo) {
       dispatch(setSelectedPetId(petInfo.id)); // localStorage에 id만 따로 저장
-      ENV.IS_DEMO ? navigate('/') : navigate('/slot?flow=signup');
+      ENV.IS_DEMO ? navigate('/') : navigate('/onboarding/slot?flow=signup');
     } else if (error) {
       alert(error);
     }

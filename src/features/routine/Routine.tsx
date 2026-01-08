@@ -28,7 +28,7 @@ export const Routine = ({ petId }: RoutineProps) => {
         <RoutineTitleContainer>
           <RoutineTitle>오늘의 루틴</RoutineTitle>
           <Actions>
-            <EditButton onClick={() => navigate('/slot')}>수정</EditButton>
+            <EditButton onClick={() => navigate('/onboarding/slot')}>수정</EditButton>
             {!routineData && <Notice>슬롯 설정하기</Notice>}
           </Actions>
         </RoutineTitleContainer>

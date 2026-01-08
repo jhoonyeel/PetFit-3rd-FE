@@ -1,5 +1,4 @@
 import { createBrowserRouter } from 'react-router-dom';
-
 import { MainLayout } from '@/layouts/MainLayout';
 import { PlainLayout } from '@/layouts/PlainLayout';
 import { AuthLoginRedirectPage } from '@/pages/AuthLoginRedirectPage';
@@ -16,10 +15,8 @@ import { PetManagementPage } from '@/pages/PetManagementPage';
 import { SignupPetRegisterPage } from '@/pages/SignupPetRegisterPage';
 import { SlotSettingPage } from '@/pages/SlotSettingPage';
 import { WithdrawPage } from '@/pages/WithdrawPage';
-
 import { PrivateRouter } from './PrivateRouter';
 import { PublicRouter } from './PublicRouter';
-import { StateGuard } from './StateGuard';
 import { AIReportPage } from '@/pages/AIReportPage';
 import { AIReportListPage } from '@/pages/AIReportListPage';
 import { AIReportDetailPage } from '@/pages/AIReportDetailPage';
@@ -27,9 +24,9 @@ import { AlarmUnreadPage } from '@/pages/AlarmUnreadPage';
 import { OnboardingOnly } from './OnboardingOnly';
 
 export const router = createBrowserRouter([
-  // ── Public 영역: 로그인/리다이렉트 등 ─────────────────────────────
+  // Public: unauthenticated 전용
   {
-    element: <PublicRouter />, // ★ 인증 상태에 따라 /login 접근 차단
+    element: <PublicRouter />,
     children: [
       {
         element: <PlainLayout />,
@@ -42,50 +39,43 @@ export const router = createBrowserRouter([
     ],
   },
 
-  // ── Private 영역: 보호 라우트 ────────────────────────────────────
+  // Private 앱 쉘: 로그인된 상태 전용
   {
     element: <PrivateRouter />,
     children: [
-      // 메인 섹션: memberId & selectedPetId 모두 필요
+      // 온보딩 트리: status === 'onboarding'만 소속
       {
-        element: <StateGuard requireAuth requireSelectedPet />,
+        path: '/onboarding',
+        element: <OnboardingOnly />,
         children: [
           {
-            element: <MainLayout />,
+            element: <PlainLayout />,
             children: [
-              { path: '/', element: <HomePage /> },
-              { path: '/alarm', element: <AlarmPage /> },
-              { path: '/alarm/unread', element: <AlarmUnreadPage /> },
-              { path: '/calendar', element: <CalendarPage /> },
-              { path: '/mypage', element: <MyPage /> },
-              { path: '/withdraw', element: <WithdrawPage /> },
-              { path: '/edit/nickname', element: <NicknameEditPage /> },
-              { path: '/manage', element: <PetManagementPage /> },
-              { path: '/add/pet', element: <PetAddPage /> },
-              { path: '/edit/pet/:petId', element: <PetEditPage /> },
-              { path: '/aireport', element: <AIReportPage /> },
-              { path: '/aireport/list', element: <AIReportListPage /> },
-              { path: '/aireport/:reportId', element: <AIReportDetailPage /> },
+              { path: 'pet', element: <SignupPetRegisterPage /> },
+              { path: 'slot', element: <SlotSettingPage /> },
             ],
           },
         ],
       },
-      // 온보딩 섹션: memberId만 필요, selectedPetId 불필요
+
+      // 앱 기능 트리: status === 'authenticated'만 소속
       {
-        element: <OnboardingOnly />,
+        path: '/',
+        element: <MainLayout />,
         children: [
-          {
-            element: <StateGuard requireAuth requireSelectedPet={false} />,
-            children: [
-              {
-                element: <PlainLayout />,
-                children: [
-                  { path: '/signup/pet', element: <SignupPetRegisterPage /> },
-                  { path: '/slot', element: <SlotSettingPage /> },
-                ],
-              },
-            ],
-          },
+          { index: true, element: <HomePage /> },
+          { path: 'alarm', element: <AlarmPage /> },
+          { path: 'alarm/unread', element: <AlarmUnreadPage /> },
+          { path: 'calendar', element: <CalendarPage /> },
+          { path: 'mypage', element: <MyPage /> },
+          { path: 'withdraw', element: <WithdrawPage /> },
+          { path: 'edit/nickname', element: <NicknameEditPage /> },
+          { path: 'manage', element: <PetManagementPage /> },
+          { path: 'add/pet', element: <PetAddPage /> },
+          { path: 'edit/pet/:petId', element: <PetEditPage /> },
+          { path: 'aireport', element: <AIReportPage /> },
+          { path: 'aireport/list', element: <AIReportListPage /> },
+          { path: 'aireport/:reportId', element: <AIReportDetailPage /> },
         ],
       },
     ],
