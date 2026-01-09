@@ -46,7 +46,7 @@ export const BottomNav = () => {
             </>
           )}
         </StyledLink>
-        <DemoBlock>
+        <DemoBlock navItem>
           <StyledLink to="/aireport">
             {({ isActive }) => (
               <>
@@ -61,7 +61,7 @@ export const BottomNav = () => {
             )}
           </StyledLink>
         </DemoBlock>
-        <DemoBlock>
+        <DemoBlock navItem>
           <StyledLink to="/mypage">
             {({ isActive }) => (
               <>

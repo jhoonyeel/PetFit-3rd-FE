@@ -9,7 +9,6 @@ export interface MonthlyEntryDto {
   completed: boolean; // 루틴 완료 여부
   memo: boolean; // 메모 존재 여부
   remarked: boolean; // 특이사항 존재 여부
-  scheduled: boolean; // UI에선 제외(요구사항 외)
 }
 
 // 일간 상세 조회 DTO

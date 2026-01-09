@@ -13,7 +13,6 @@ export interface MonthlyEntryEntity {
   completed: boolean;
   memo: boolean;
   remarked: boolean;
-  scheduled: boolean;
 }
 
 export interface DailyEntryEntity {

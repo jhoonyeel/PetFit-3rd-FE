@@ -44,7 +44,6 @@ export const toMonthlyEntryEntity = (dto: MonthlyEntryDto): MonthlyEntryEntity =
   completed: dto.completed,
   memo: dto.memo,
   remarked: dto.remarked,
-  scheduled: dto.scheduled,
 });
 
 export const toNoteEntity = (dto: RemarkDto): NoteEntity => ({
