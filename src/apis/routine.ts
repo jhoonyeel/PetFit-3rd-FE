@@ -1,13 +1,8 @@
 import { axiosInstance } from './axiosInstance';
 
 export const getDailyRoutine = async (petId: number, date: string) => {
-  try {
-    const response = await axiosInstance.get(`routines/${petId}/daily/${date}`);
-    return response.data.content;
-  } catch (error) {
-    console.log('get daily routine failed', error);
-    throw error;
-  }
+  const response = await axiosInstance.get(`routines/${petId}/daily/${date}`);
+  return response.data.content;
 };
 
 export const checkRoutine = async (petId: number, date: string, category: string) => {

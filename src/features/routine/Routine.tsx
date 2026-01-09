@@ -16,11 +16,13 @@ interface RoutineProps {
 export const Routine = ({ petId }: RoutineProps) => {
   const navigate = useNavigate();
   const { data: slot, isLoading: isSlotLoading } = useSlot(petId);
-  const { data: routineData, isLoading: isRoutineLoading } = useDailyRoutine(petId, {
+  const { data: routineData } = useDailyRoutine(petId, {
     enabled: !!slot,
   });
 
-  if (isSlotLoading || isRoutineLoading) return <LoadingSpinner />;
+  if (isSlotLoading) return <LoadingSpinner />;
+
+  const hasRoutine = (routineData?.length ?? 0) > 0;
 
   return (
     <div>
@@ -29,10 +31,10 @@ export const Routine = ({ petId }: RoutineProps) => {
           <RoutineTitle>오늘의 루틴</RoutineTitle>
           <Actions>
             <EditButton onClick={() => navigate('/onboarding/slot')}>수정</EditButton>
-            {!routineData && <Notice>슬롯 설정하기</Notice>}
+            {!hasRoutine && <Notice>슬롯 설정하기</Notice>}
           </Actions>
         </RoutineTitleContainer>
-        {routineData && <RoutineProgress petId={petId} />}
+        {hasRoutine && <RoutineProgress petId={petId} />}
       </Container>
       <RoutineItem petId={petId} />
     </div>
