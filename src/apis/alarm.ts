@@ -39,7 +39,7 @@ export const deleteAlarm = async (alarmId: AlarmId): Promise<string> => {
 };
 
 /**
- * 4) 알람 전체 목록 조회: GET /alarms/{petId}/all
+ * 4) 알람 전체 목록 조회: GET /alarms/{petId}
  */
 export const getAllAlarms = async (petId: number): Promise<AlarmDto[]> => {
   const res = await axiosInstance.get<ApiResponse<AlarmDto[]>>(`/alarms/${petId}`);

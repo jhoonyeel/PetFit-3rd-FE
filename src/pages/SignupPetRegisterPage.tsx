@@ -13,6 +13,8 @@ import { Button } from '@/ds/Button';
 import { TitleHeader } from '@/components/common/TitleHeader';
 import type { PetForm } from '@/types/pet';
 import { ENV } from '@/constants/env';
+import { initializeSlot } from '@/apis/slot';
+import { DEFAULT_NEW_SLOT } from '@/mocks/demo';
 
 export const SignupPetRegisterPage = () => {
   const [form, setForm] = useState<PetForm>({
@@ -32,13 +34,17 @@ export const SignupPetRegisterPage = () => {
     if (!isValid || loading) return;
 
     const petInfo = await register(form); // ✅ id 포함 결과
+    if (!petInfo) return;
 
-    if (petInfo) {
-      dispatch(setSelectedPetId(petInfo.id)); // localStorage에 id만 따로 저장
-      ENV.IS_DEMO ? navigate('/') : navigate('/onboarding/slot?flow=signup');
-    } else if (error) {
-      alert(error);
+    dispatch(setSelectedPetId(petInfo.id)); // localStorage에 id만 따로 저장
+
+    if (ENV.IS_DEMO) {
+      await initializeSlot(petInfo.id, DEFAULT_NEW_SLOT);
+      navigate('/');
+      return;
     }
+
+    navigate('/onboarding/slot?flow=signup');
   };
 
   return (

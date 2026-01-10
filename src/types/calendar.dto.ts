@@ -14,8 +14,8 @@ export interface MonthlyEntryDto {
 // 일간 상세 조회 DTO
 export interface DailyEntryDto {
   entryDate: string; // 'YYYY-MM-DD'
-  remarkResponseList: RemarkDto[];
   routineResponseList: RoutineDto[];
+  remarkResponseList: RemarkDto[];
 }
 
 // 특이사항(remark) DTO

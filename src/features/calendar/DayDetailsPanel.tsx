@@ -15,6 +15,7 @@ import type { UiNote } from '@/types/calendar.ui';
 import { toNoteEntity, toUiNote } from '@/utils/transform/calendar';
 import { toUiRoutine } from '@/utils/transform/routine';
 import type { NotesFeatureHandle } from './NotesFeature';
+import { DemoBlock } from '@/components/DemoBlock';
 
 interface DayDetailsPanelProps {
   selectedDate: Date;
@@ -55,7 +56,9 @@ export const DayDetailsPanel = ({ selectedDate }: DayDetailsPanelProps) => {
     <Wrapper>
       <MarginBottom>
         <SectionTitle>하루 루틴</SectionTitle>
-        <SectionAction onClick={handleAddNote}>특이사항 추가</SectionAction>
+        <DemoBlock onlyNewBlock>
+          <SectionAction onClick={handleAddNote}>특이사항 추가</SectionAction>
+        </DemoBlock>
       </MarginBottom>
 
       <Section role="region" aria-label="하루 루틴">

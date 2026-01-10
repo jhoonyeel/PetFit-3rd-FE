@@ -28,14 +28,14 @@ export const AuthLoginRedirectPage = () => {
         await kakaoLogin(code);
 
         // 2) Who am I
-        const { onboarding, selectedPetId } = await getAuthMe();
+        const me = await getAuthMe();
 
-        const petDone = !!onboarding?.petDone;
-        const routineDone = !!onboarding?.routineDone;
+        const petDone = !!me.onboarding?.petDone;
+        const routineDone = !!me.onboarding?.routineDone;
         const canEnterHome = petDone && routineDone;
 
         if (!canEnterHome) {
-          dispatch(setOnboarding({ petDone, routineDone }));
+          dispatch(setOnboarding({ onboarding: me.onboarding, scenario: me.scenario }));
           dispatch(setSelectedPetId(null));
 
           navigate(petDone ? '/onboarding/slot' : '/onboarding/pet', { replace: true });
@@ -43,7 +43,7 @@ export const AuthLoginRedirectPage = () => {
         }
         // 홈 진입 조건이면: 서버가 준 selectedPetId를 SSOT로 세팅
         // (null이면 가드에서 막히므로 여기서도 보험으로 처리)
-        dispatch(setSelectedPetId(selectedPetId ?? null));
+        dispatch(setSelectedPetId(me.selectedPetId ?? null));
         dispatch(setAuthenticated());
 
         navigate('/', { replace: true });

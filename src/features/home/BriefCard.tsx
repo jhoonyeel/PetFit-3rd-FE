@@ -4,6 +4,7 @@ import { ChevronDown, ChevronUp, Plus } from 'lucide-react';
 import styled from 'styled-components';
 
 import { tx } from '@/styles/typography';
+import { DemoBlock } from '@/components/DemoBlock';
 
 export type BriefItem = Readonly<{ id: number; title: string }>;
 export type BriefVariant = 'alarm' | 'note';
@@ -41,14 +42,17 @@ export const BriefCard = ({ variant, items, loading, error, onAdd }: BriefCardPr
           <ColorBar $color={color} />
           <Title>{label}</Title>
         </TitleRow>
-        <AddButton
-          type="button"
-          onClick={onAdd}
-          aria-label={`${label} 추가`}
-          data-testid="brief-add-button"
-        >
-          <Plus size={16} />
-        </AddButton>
+        <DemoBlock onlyNewBlock>
+          <AddButton
+            type="button"
+            aria-label={`${label} 추가`}
+            data-testid="brief-add-button"
+            // onClick 막는 건 DemoBlock이 overlay로 막음
+            onClick={onAdd}
+          >
+            <Plus size={16} />
+          </AddButton>
+        </DemoBlock>
       </Header>
       <BulletList>
         {error ? (

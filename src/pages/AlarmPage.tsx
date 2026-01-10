@@ -11,6 +11,7 @@ import { toAlarmEntity, toUiAlarm } from '@/utils/transform/alarm';
 import { Button } from '@/ds/Button';
 import { tx } from '@/styles/typography';
 import { Plus } from 'lucide-react';
+import { DemoBlock } from '@/components/DemoBlock';
 
 export const AlarmPage = () => {
   const petId = useSelector((s: RootState) => s.petSession.selectedPetId);
@@ -58,9 +59,11 @@ export const AlarmPage = () => {
             <Text>알람 추가</Text>
           </AddButton>
         ) : (
-          <Button size="lg" fullWidth onClick={() => featureRef.current?.openCreate()}>
-            알람 추가하기
-          </Button>
+          <DemoBlock onlyNewBlock>
+            <Button size="lg" fullWidth onClick={() => featureRef.current?.openCreate()}>
+              알람 추가하기
+            </Button>
+          </DemoBlock>
         )}
       </Footer>
     </Wrapper>

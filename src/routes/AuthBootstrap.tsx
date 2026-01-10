@@ -34,21 +34,21 @@ export const AuthBootstrap = () => {
       dispatch(startAuthCheck());
 
       try {
-        const { onboarding, selectedPetId } = await getAuthMe();
+        const me = await getAuthMe();
 
-        const petDone = !!onboarding?.petDone;
-        const routineDone = !!onboarding?.routineDone;
+        const petDone = !!me.onboarding?.petDone;
+        const routineDone = !!me.onboarding?.routineDone;
         const canEnterHome = petDone && routineDone;
 
         if (!canEnterHome) {
           dispatch(setSelectedPetId(null));
-          dispatch(setOnboarding({ petDone, routineDone }));
+          dispatch(setOnboarding({ onboarding: me.onboarding, scenario: me.scenario }));
           return;
         }
 
         // 홈 진입: 서버가 선택한 id가 SSOT
-        dispatch(setSelectedPetId(selectedPetId)); // null 가능(보험)
-        dispatch(setAuthenticated());
+        dispatch(setSelectedPetId(me.selectedPetId)); // null 가능(보험)
+        dispatch(setAuthenticated({ scenario: me.scenario }));
       } catch {
         dispatch(setUnauthenticated('Auth_Me_Failed'));
       }
