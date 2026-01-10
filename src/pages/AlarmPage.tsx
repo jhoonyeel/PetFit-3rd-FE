@@ -59,7 +59,7 @@ export const AlarmPage = () => {
             <Text>알람 추가</Text>
           </AddButton>
         ) : (
-          <DemoBlock onlyNewBlock>
+          <DemoBlock onlyNewBlock fullWidth>
             <Button size="lg" fullWidth onClick={() => featureRef.current?.openCreate()}>
               알람 추가하기
             </Button>
