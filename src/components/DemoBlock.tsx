@@ -1,19 +1,46 @@
 import styled from 'styled-components';
 import { ENV } from '@/constants/env';
 import type { ReactNode } from 'react';
+import type { RootState } from '@/store/store';
+import { useSelector } from 'react-redux';
 
 interface DemoBlockProps {
   children: ReactNode;
+  onlyNewBlock?: boolean;
+  onlyExistingBlock?: boolean;
   fullWidth?: boolean;
   navItem?: boolean;
 }
 
-export const DemoBlock = ({ children, fullWidth = false, navItem = false }: DemoBlockProps) => {
-  if (!ENV.IS_DEMO) return <>{children}</>;
+export const DemoBlock = ({
+  children,
+  onlyNewBlock = false,
+  onlyExistingBlock = false,
+  fullWidth = false,
+  navItem = false,
+}: DemoBlockProps) => {
+  const scenario = useSelector((s: RootState) => s.auth.scenario); // 'new' | 'existing' | undefined
+
+  // ❌ 잘못된 사용 방지. 발생할 수 없는 상황. 정책 비즈니스 오류.
+  if (onlyNewBlock && onlyExistingBlock) {
+    if (process.env.NODE_ENV !== 'production') {
+      throw new Error('DemoBlock: onlyNewBlock and onlyExistingBlock cannot be used together.');
+    }
+  }
+
+  const shouldBlock =
+    ENV.IS_DEMO &&
+    ((!onlyNewBlock && !onlyExistingBlock) || // ✅ 기본: 항상 차단
+      (onlyNewBlock && scenario === 'new') ||
+      (onlyExistingBlock && scenario === 'existing'));
+
+  if (!shouldBlock) {
+    return <>{children}</>;
+  }
   return (
     <Wrapper $fullWidth={fullWidth} $navItem={navItem}>
       {children}
-      <Overlay />
+      <Overlay aria-hidden />
     </Wrapper>
   );
 };
